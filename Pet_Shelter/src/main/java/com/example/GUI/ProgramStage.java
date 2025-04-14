@@ -1,0 +1,518 @@
+package com.example.GUI;
+
+import com.example.Exceptions.AlreadyFoundException;
+import com.example.pet_shelter.*;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.*;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import javafx.util.Callback;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
+
+public class ProgramStage extends AnchorPane implements Initializable {
+
+    public ListView<Pet> currentPets;
+    public TextField phoneNumField;
+    public TextField emailField;
+    public TextField userNameField;
+
+    public AnchorPane ProfileNodes;
+
+    public ListView<AdoptionRequest> historyListView;
+
+    @FXML
+    private ImageView homeView;
+
+    @FXML
+    private Button adminButton;
+
+    @FXML
+    private Button adoptButton;
+
+
+    @FXML
+    private BorderPane borderPane;
+
+    @FXML
+    private AnchorPane leftAnchorPane;
+
+    @FXML
+    private Button profileButton;
+
+    @FXML
+    private Button requestButton;
+
+    @FXML
+    private Label nameLabel;
+
+
+
+
+    @FXML
+    private Button adoptPetButton;
+    @FXML
+    private ImageView petImage;
+    @FXML
+    private Label speciesLabel;
+    @FXML
+    private Label breedLabel;
+
+    @FXML
+    private Label healthStatusLabel;
+
+    @FXML
+    private Label idLabel;
+    @FXML
+    private Label ageLabel;
+
+    @FXML
+    private GridPane gridPane;
+
+    @FXML
+    private VBox adoptVBox;
+
+    public Pet chosenPet;
+
+    @FXML
+    private Button shelterButton;
+
+    @FXML
+    private AnchorPane mainAnchorPane;
+    @FXML
+    private HBox swapHBox;
+    private petListener PetListener;
+
+    public static Shelter chosenShelter;
+
+
+    //Nodes used in the  Admin pane
+
+    @FXML
+    private HBox adminHBox;
+    @FXML
+    private TextField searchField;
+    @FXML
+    private ComboBox searchCriteriaComboBox;
+
+
+
+    //List of nodes to swap betweeen scenes
+
+
+
+    ArrayList<Node> adminNodes = new ArrayList<>();
+    ArrayList<Node> adoptNodes = new ArrayList<>();
+
+    int currentMenu = 0; //Swaps between different buttons in the program, 0,1,2,3 for Profile, Adopt, Request, History respectively.
+
+
+    public ProgramStage() {
+
+    }
+
+    @FXML
+    void onReporting() throws IOException{
+        addNewStage("/FXML/reportingUsers.fxml", "Reporting");
+        System.out.println("i'm here");
+    }
+
+    @FXML
+    void onSearch(ActionEvent event) {
+
+        System.out.println("i'm here wallahy");
+        String searchKey = searchField.getText().trim();
+        String selectedCriteria = (String) searchCriteriaComboBox.getValue();
+
+
+        if (searchKey.isEmpty() || selectedCriteria == null) {
+            searchPetPosts(chosenShelter.getPets());
+            throw new AlreadyFoundException("Help me with key i'm poor ;0");
+        }
+
+        ArrayList<Pet> searchedPets = new ArrayList<>();
+        switch (selectedCriteria) {
+            case "Name":
+                searchedPets = AdvancedSearch.SearchUsingName(chosenShelter.getPets(), searchKey);
+                break;
+            case "Age":
+                try {
+                    int age = Integer.parseInt(searchKey); //convert
+                    searchedPets = AdvancedSearch.SearchUsingAge(chosenShelter.getPets(), age);
+                } catch (NumberFormatException e) {
+                    searchPetPosts(new ArrayList<Pet>()); // no pets if age is invalid
+                    return;
+                }
+                break;
+            case "Breed":
+                searchedPets = AdvancedSearch.SearchUsingBreed(chosenShelter.getPets(), searchKey);
+                break;
+        }
+
+        searchPetPosts(searchedPets);
+    }
+
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        showPetPosts(chosenShelter.getPets());
+        //Store all scene nodes in their respective arrayLists.
+        adoptNodes.add(adoptVBox);
+        adoptNodes.add(leftAnchorPane);
+        adoptNodes.add(shelterButton);
+
+
+        mainAnchorPane.getChildren().clear();
+        mainAnchorPane.getChildren().add(swapHBox);
+
+
+        adoptNodes.forEach(child -> {child.setVisible(true);});
+
+        mainAnchorPane.getChildren().addAll(adoptNodes);
+        showPetPosts(chosenShelter.getPets());
+
+        //Remove Admin button if the user is not an admin
+
+        if(!User.loggedInUser.getUserRole().equals("admin"))
+        {
+            swapHBox.getChildren().remove(adminButton);
+        }
+
+
+
+
+        //Set the CurrentPets list view factory
+        currentPets.setCellFactory(new Callback<ListView<Pet>, ListCell<Pet>>() {
+            @Override
+            public ListCell<Pet> call(ListView listView) {
+                return new ListCell<Pet>(){
+                    protected void updateItem(Pet pet, boolean empty) {
+                        super.updateItem(pet, empty);
+                        if(!empty)
+                        {
+                            AnchorPane anchorPane;
+
+                            FXMLLoader loader = new FXMLLoader(getClass().getResource("/FXML/pet-post.fxml"));
+                            try {
+                                anchorPane = loader.load();
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                            petPostController controller = loader.getController();
+
+                            anchorPane.setPrefWidth(currentPets.getWidth());
+                            anchorPane.setPrefHeight(USE_COMPUTED_SIZE);
+                            controller.setPostData(pet, null);
+                            setGraphic(anchorPane);
+                        }
+                    }
+                };
+            }
+        });
+
+        //Set the historyRequest list view factory
+        historyListView.setCellFactory(new Callback<ListView<AdoptionRequest>, ListCell<AdoptionRequest>>() {
+            @Override
+            public ListCell<AdoptionRequest> call(ListView<AdoptionRequest> adoptionRequestListView) {
+                return new ListCell<>(){
+                    protected void updateItem(AdoptionRequest adoptionRequest, boolean empty) {
+                        super.updateItem(adoptionRequest, empty);
+                        if (!empty) {
+                            AnchorPane anchorPane = new AnchorPane();
+
+                            Text petName = new Text(adoptionRequest.adoptedPet.getName());
+                            Text status = new Text(adoptionRequest.getStatus().toString());
+                            status.setTranslateX(400);
+                            anchorPane.getChildren().add(petName);
+                            anchorPane.getChildren().add(status);
+                            setGraphic(anchorPane);
+                        }
+                    }
+                };
+            }
+        });
+    }//End of logic;
+
+
+    public void setPetData(Pet pet)
+    {
+        nameLabel.setText("Name: " + pet.getName());
+        ageLabel.setText("Age: "+ pet.getAge());
+        healthStatusLabel.setText("Health Status:" + pet.getHealthStatus());
+        breedLabel.setText("Breed: " + pet.getBreed());
+        speciesLabel.setText("Species: " + pet.getSpecies());
+        petImage.setImage(pet.getPetImage());
+     }
+
+    public void setUserData(User user)
+    {
+        userNameField.setText(user.getUserName());
+        emailField.setText(user.getUserEmail());
+        phoneNumField.setText(String.valueOf(user.getContactInfo().getPhoneNumber()));
+    }
+
+    public void ChooseMenu() {
+
+
+        mainAnchorPane.getChildren().clear();
+
+        mainAnchorPane.getChildren().add(swapHBox);
+
+
+        switch (currentMenu) {
+
+            //Add nodes for the adoption view menu
+            case 0: {
+                mainAnchorPane.getChildren().addAll(adoptNodes);
+                break;
+            }
+            // Add nodes for profile Menu
+            case 1: {
+                mainAnchorPane.getChildren().addAll(ProfileNodes);
+                break;
+            }
+            // Add nodes for Adopt Menu
+            case 2: {
+
+
+                break;
+            }
+            // Add nodes for Admin menu
+            case 3: {
+                mainAnchorPane.getChildren().add(adminHBox);
+                break;
+            }
+            // Add nodes for History menu
+            default: {
+                break;
+            }
+        }
+    }
+
+    @FXML
+    void onAdopt(ActionEvent event) {
+        currentMenu = 0;
+        showPetPosts(chosenShelter.getPets());
+        ChooseMenu();
+        System.out.println("I was clicked but not swapped");
+    }
+
+    @FXML
+    void onHistory(ActionEvent event) {
+    }
+
+    @FXML
+    void onProfile(ActionEvent event) {
+        if(User.loggedInUser.getCurrentPets() == null)
+        {}
+        else if( !User.loggedInUser.getCurrentPets().isEmpty())
+        {
+
+            currentPets.getItems().clear();
+            currentPets.getItems().addAll(User.loggedInUser.getCurrentPets());
+            currentPets.refresh();
+        }
+        if(User.loggedInUser.getAdoptionHistory() == null)
+        {}
+        else if(!User.loggedInUser.getAdoptionHistory().isEmpty())
+        {
+            historyListView.getItems().clear();
+            historyListView.getItems().addAll(User.loggedInUser.getAdoptionHistory());
+            historyListView.refresh();
+            System.out.println("yasta mwgod");
+        }
+        setUserData(User.loggedInUser);
+        currentMenu = 1;
+        ChooseMenu();
+    }
+
+    @FXML
+    void onRequest(ActionEvent event) {
+        currentMenu = 3;
+        ChooseMenu();
+    }
+
+
+    @FXML
+    void onAdoptPet(ActionEvent event)
+    {
+
+        AdoptionRequest.adopt(chosenPet);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION,"Your request is under review");
+        alert.setTitle("Error");
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.setAlwaysOnTop(true);
+        stage.toFront();
+        stage.showAndWait();
+    }
+
+    @FXML
+    void onAdminButton(ActionEvent event)
+    {
+        currentMenu = 3;
+        ChooseMenu();
+    }
+
+    @FXML
+    void onHomeView(MouseEvent event) throws IOException {
+        Main m = new Main();
+        m.changeScene("/FXML/login-view.fxml");
+    }
+
+    @FXML
+    void onModifyUser() throws IOException {
+        addNewStage("/FXML/modify-user.fxml", "Modify Users");
+    }
+
+    @FXML
+    void onModifyPet() throws IOException{
+       addNewStage("/FXML/modify-pet.fxml", "Modify Pet");
+    }
+
+    @FXML
+    void onModifyShelter() throws IOException{
+        addNewStage("/FXML/modify-shelter.fxml", "Modify Shelter");
+    }
+
+    private void addNewStage(String fxml, String title) throws IOException {
+        Stage stage = new Stage();
+        stage.resizableProperty().setValue(Boolean.TRUE);
+        stage.sizeToScene();
+        FXMLLoader fxmlLoader = new FXMLLoader(ProgramStage.class.getResource(fxml));
+        Scene scene = new Scene(fxmlLoader.load());
+        stage.setTitle(title);
+        stage.setScene(scene);
+        stage.toFront();
+        stage.setAlwaysOnTop(true);
+        stage.requestFocus();
+        stage.showAndWait();
+    }
+
+    private void showPetPosts(ArrayList<Pet> pets)
+    {
+        //Add all pet posts to the main page on Start-up
+        int column = 0;
+        int row = 1;
+
+        if(!chosenShelter.getPets().isEmpty())
+        {
+            PetListener = new petListener() {
+                @Override
+                public void onClickPet(Pet pet) {
+                    setPetData(pet);
+                    chosenPet=pet;
+                }
+            };
+        }
+
+        try {
+            for (int i = 0; i < chosenShelter.getPets().size(); i++) {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/FXML/pet-post.fxml"));
+                AnchorPane anchorPostPane = fxmlLoader.load();
+                petPostController petController = fxmlLoader.getController();
+                petController.setPostData(chosenShelter.getPets().get(i), PetListener);
+                if (column == 2)
+                {
+                    row += 1;
+                    column = 0;
+                }
+                GridPane.setMargin(anchorPostPane, new Insets(10, 10 , 10, 10 ));
+                gridPane.add(anchorPostPane, column++, row);
+                gridPane.setPrefHeight(Region.USE_COMPUTED_SIZE);
+                gridPane.setMinHeight(Region.USE_COMPUTED_SIZE);
+                gridPane.setMaxHeight(Region.USE_PREF_SIZE);
+                gridPane.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                gridPane.setMinWidth(Region.USE_COMPUTED_SIZE);
+                gridPane.setMaxWidth(Region.USE_PREF_SIZE);
+            }
+        } catch (IOException e) {
+            System.out.println("File is gone lmao");
+        } catch (NullPointerException ne) {
+            System.out.println("Couldn't find the file");
+        }
+    }
+
+    private void searchPetPosts(ArrayList<Pet> pets)
+    {
+        gridPane.getChildren().clear();
+        //Add all pet posts to the main page on Start-up
+        int column = 0;
+        int row = 1;
+
+        if(!pets.isEmpty())
+        {
+            PetListener = new petListener() {
+                @Override
+                public void onClickPet(Pet pet) {
+                    setPetData(pet);
+                    chosenPet=pet;
+                }
+            };
+        }
+
+        try {
+            for (int i = 0; i < pets.size(); i++) {
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/FXML/pet-post.fxml"));
+                AnchorPane anchorPostPane = fxmlLoader.load();
+                petPostController petController = fxmlLoader.getController();
+                petController.setPostData(pets.get(i), PetListener);
+                if (column == 2)
+                {
+                    row += 1;
+                    column = 0;
+                }
+                GridPane.setMargin(anchorPostPane, new Insets(10, 10 , 10, 10 ));
+                gridPane.add(anchorPostPane, column++, row);
+                gridPane.setPrefHeight(Region.USE_COMPUTED_SIZE);
+                gridPane.setMinHeight(Region.USE_COMPUTED_SIZE);
+                gridPane.setMaxHeight(Region.USE_PREF_SIZE);
+                gridPane.setPrefWidth(Region.USE_COMPUTED_SIZE);
+                gridPane.setMinWidth(Region.USE_COMPUTED_SIZE);
+                gridPane.setMaxWidth(Region.USE_PREF_SIZE);
+            }
+        } catch (IOException e) {
+            System.out.println("File is gone lmao");
+        } catch (NullPointerException ne) {
+            System.out.println("Couldn't find the file");
+        }
+    }
+
+
+    @FXML
+    void onShelter() throws IOException
+    {
+        Main m = new Main();
+        m.changeScene("/FXML/Shelter-view.fxml");
+    }
+
+
+    @FXML
+    void OnRequest() throws IOException {
+        addNewStage("/FXML/Request stage.fxml","RequestStage");
+    }
+
+
+    public void onUpdateData(ActionEvent actionEvent) {
+    }
+}
+
+
+
+
+
+
+
+
