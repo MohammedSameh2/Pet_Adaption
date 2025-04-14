@@ -1,0 +1,357 @@
+Index: Pet_Shelter/src/main/java/com/example/pet_shelter/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>//\r\n// Source code recreated from a .class file by IntelliJ IDEA\r\n// (powered by FernFlower decompiler)\r\n//\r\npackage com.example.pet_shelter;\r\n\r\nimport javafx.application.Application;\r\nimport javafx.fxml.FXMLLoader;\r\nimport javafx.scene.Parent;\r\nimport javafx.scene.Scene;\r\nimport javafx.stage.Stage;\r\n\r\nimport java.io.IOException;\r\nimport java.util.List;\r\nimport java.util.Objects;\r\n\r\npublic class Main extends Application {\r\n    public static List<User> currentUsers;\r\n    public static List<Pet> allPets;\r\n    public static List<AdoptionRequest> requests;\r\n    public static Stage changeStage;\r\n\r\n\r\n    public Main() {\r\n    }\r\n\r\n    public void start(Stage stage) throws IOException {\r\n        stage.resizableProperty().setValue(Boolean.TRUE);\r\n\r\n\r\n        stage.setWidth(1000);\r\n        stage.setHeight(1000);\r\n\r\n\r\n        changeStage = stage;\r\n        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(\"/FXML/login-view.fxml\"));\r\n        Scene scene = new Scene(fxmlLoader.load());\r\n        stage.setTitle(\"Salutations\");\r\n        stage.setScene(scene);\r\n        stage.show();}\r\n\r\n\r\n\r\n\r\n    public void changeScene(String FXML) throws IOException {\r\n        Parent changeRoot = FXMLLoader.load(Objects.requireNonNull(this.getClass().getResource(FXML)));\r\n        changeStage.getScene().setRoot(changeRoot);\r\n        changeStage.setWidth(1000);\r\n        changeStage.setHeight(1000);\r\n        changeStage.show();\r\n    }\r\n\r\n    public static void main(String[] args) {\r\n        ReadAllData();\r\n        launch();\r\n        WriteAllData();\r\n    }\r\n\r\n    public static void ReadAllData() {\r\n        currentUsers = User.readData();\r\n        allPets = Pet.readData();\r\n        requests=AdoptionRequest.readData();\r\n\r\n    }\r\n\r\n    public static void WriteAllData() {\r\n        User.writeData(currentUsers);\r\n        Pet.writeData(allPets);\r\n        AdoptionRequest.writeData(requests);\r\n    }\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Pet_Shelter/src/main/java/com/example/pet_shelter/Main.java b/Pet_Shelter/src/main/java/com/example/pet_shelter/Main.java
+--- a/Pet_Shelter/src/main/java/com/example/pet_shelter/Main.java	(revision bd3f697fee33d9e7049c8156b99e7040851b5370)
++++ b/Pet_Shelter/src/main/java/com/example/pet_shelter/Main.java	(date 1734653261771)
+@@ -33,7 +33,7 @@
+ 
+ 
+         changeStage = stage;
+-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/FXML/login-view.fxml"));
++        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/FXML/program-view.fxml"));
+         Scene scene = new Scene(fxmlLoader.load());
+         stage.setTitle("Salutations");
+         stage.setScene(scene);
+@@ -59,9 +59,9 @@
+     public static void ReadAllData() {
+         currentUsers = User.readData();
+         allPets = Pet.readData();
+-        requests=AdoptionRequest.readData();
+-
++        requests = AdoptionRequest.readData();
+     }
++
+ 
+     public static void WriteAllData() {
+         User.writeData(currentUsers);
+Index: Pet_Shelter/src/main/java/com/example/pet_shelter/User.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.pet_shelter;\r\n\r\nimport com.example.Exceptions.AlreadyFoundException;\r\nimport org.json.JSONArray;\r\nimport org.json.JSONObject;\r\nimport java.nio.file.Files;\r\nimport java.nio.file.Path;\r\nimport java.io.FileWriter;\r\nimport java.io.IOException;\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n//My Fav User Ever Go To Hell\r\npublic class User {\r\n    final int id;\r\n    private String user_name;\r\n    private String user_password;\r\n    private String user_role;\r\n    private String user_email;\r\n    private int age;\r\n    private String gender;\r\n    public ContactInformation contactInfo;\r\n\r\n    // File to store user data\r\n    private static final String FILE_NAME = \"users.json\";\r\n    public static User loggedInUser;\r\n\r\n    public User(int id, String user_name, String user_password, String user_role, String user_email, int age, String gender, ContactInformation contactInfo) {\r\n\r\n        this.id = id;\r\n        this.user_name = user_name;\r\n        this.user_password = user_password;\r\n        this.user_role = user_role;\r\n        this.user_email = user_email;\r\n        this.age = age;\r\n        this.gender = gender;\r\n        this.contactInfo = contactInfo;\r\n\r\n    }\r\n\r\n    // Getters and setters\r\n    public String getUserName() {\r\n        return user_name;\r\n    }\r\n\r\n    public void setUserName(String user_name) {\r\n        this.user_name = user_name;\r\n    }\r\n\r\n    public String getUserPassword() {\r\n        return user_password;\r\n    }\r\n\r\n    public void setUserPassword(String user_password) {\r\n        this.user_password = user_password;\r\n    }\r\n\r\n    public String getUserRole() {\r\n        return user_role;\r\n    }\r\n\r\n    public void setUserRole(String user_role) {\r\n        this.user_role = user_role;\r\n    }\r\n\r\n    public String getUserEmail() {\r\n        return user_email;\r\n    }\r\n\r\n    public void setUserEmail(String user_email) {\r\n        this.user_email = user_email;\r\n    }\r\n\r\n    public int getId() {return id;}\r\n    public int getAge() {return age;}\r\n    public void setAge(int age) {this.age = age;}\r\n    public String getGender() {return gender;}\r\n    public void setGender(String gender) {this.gender = gender;}\r\n\r\n    // Login method__\r\n    public static boolean login(String userName, String password) throws AlreadyFoundException {\r\n\r\n\r\n        for (User user : Main.currentUsers) {\r\n            if (user.getUserName().equals(userName) && user.getUserPassword().equals(password)) {\r\n                System.out.println(\"Login successful أهلا بيك\");\r\n                loggedInUser = user;\r\n                if(loggedInUser.getUserRole().equals(\"admin\"))\r\n                {\r\n                    loggedInUser = new AdminUser(user);\r\n                }\r\n                return true;\r\n            }\r\n        }\r\n        throw new AlreadyFoundException(\"Invalid password حاول مرة اخرى ربنا يكرمك\");\r\n    }\r\n\r\n\r\n\r\n    // Register method__\r\n    public static void register(User newUser) throws AlreadyFoundException {\r\n\r\n        for (User user : Main.currentUsers) {\r\n            if (user.getUserEmail().equals(newUser.getUserEmail())) {\r\n                throw new AlreadyFoundException(\"Email already registered.\");\r\n            }\r\n            else if(user.getId() == newUser.getId()) {\r\n                throw new AlreadyFoundException(\"ID already registered.\");\r\n            }\r\n        }\r\n        Main.currentUsers.add(newUser);\r\n        System.out.println(\"Registration successful!\");\r\n    }\r\n\r\n    // Generic function to read user data from JSON file\r\n    public static List<User> readData() {\r\n        List<User> users = new ArrayList<>();\r\n        try {\r\n            // Specify the file path\r\n            Path path = Path.of(\"Pet_Shelter/users.json\");\r\n            byte[] bytes = Files.readAllBytes(path);\r\n            String jsonString = new String(bytes);\r\n            JSONArray jsonArray = new JSONArray(jsonString);\r\n\r\n            // Iterate through the array and add User objects\r\n            for (int i = 0; i < jsonArray.length(); i++) {\r\n                JSONObject obj = jsonArray.getJSONObject(i);\r\n                users.add(new User(\r\n                        obj.getInt(\"id\"),\r\n                        obj.getString(\"user_name\"),\r\n                        obj.getString(\"user_password\"),\r\n                        obj.getString(\"user_role\"),\r\n                        obj.getString(\"user_email\"),\r\n                        obj.getInt(\"age\"),\r\n                        obj.getString(\"gender\"),\r\n                        new ContactInformation(obj.getInt(\"phoneNum\"), obj.getString(\"address\"))\r\n\r\n                ));\r\n            }\r\n        } catch (IOException e) {\r\n            System.out.println(\"No data file found. Creating a new one...\");\r\n        }\r\n        return users;\r\n    }\r\n\r\n    // Generic function to write user data to JSON file\r\n    public static void writeData(List<User> users) {\r\n        JSONArray jsonArray = new JSONArray();\r\n\r\n        for (User user : users) {\r\n            JSONObject obj = new JSONObject();\r\n            obj.put(\"id\", user.getId());\r\n            obj.put(\"user_name\", user.getUserName());\r\n            obj.put(\"user_password\", user.getUserPassword());\r\n            obj.put(\"user_role\", user.getUserRole());\r\n            obj.put(\"user_email\", user.getUserEmail());\r\n            obj.put(\"phoneNum\", user.getContactInfo().getPhoneNumber());\r\n            obj.put(\"address\", user.getContactInfo().getAddress());\r\n            obj.put(\"gender\", user.getGender());\r\n            obj.put(\"age\", user.getAge());\r\n            jsonArray.put(obj);\r\n        }\r\n\r\n        try (FileWriter writer = new FileWriter(FILE_NAME)) {\r\n            // Format 4 spaces\r\n            writer.write(jsonArray.toString(4));\r\n        } catch (IOException e) {\r\n            System.out.println(\"Error writing data to file: \" + e.getMessage());\r\n        }\r\n    }\r\n\r\n\r\n\r\n    // to use in the search for both users and admins\r\n    public void displayAllPets(ArrayList <Pet> pets){\r\n        if (pets.isEmpty()){\r\n            System.out.println(\"No Pets yet\");\r\n            return;\r\n        }\r\n        for (Pet pet : pets) {\r\n            System.out.println(\"Pet ID: \" + pet.getPetId());\r\n            System.out.println(\"Name: \" + pet.getName());\r\n            System.out.println(\"Age: \" + pet.getAge());\r\n            System.out.println(\"Breed: \" + pet.getBreed());\r\n        }\r\n    }\r\n\r\n    public ContactInformation getContactInfo(){return contactInfo;}\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Pet_Shelter/src/main/java/com/example/pet_shelter/User.java b/Pet_Shelter/src/main/java/com/example/pet_shelter/User.java
+--- a/Pet_Shelter/src/main/java/com/example/pet_shelter/User.java	(revision bd3f697fee33d9e7049c8156b99e7040851b5370)
++++ b/Pet_Shelter/src/main/java/com/example/pet_shelter/User.java	(date 1734701529152)
+@@ -124,6 +124,23 @@
+             // Iterate through the array and add User objects
+             for (int i = 0; i < jsonArray.length(); i++) {
+                 JSONObject obj = jsonArray.getJSONObject(i);
++                if(obj.getString("user_role").equalsIgnoreCase("User")){
++                    users.add(new Adopter(
++                            obj.getInt("id"),
++                            obj.getString("user_name"),
++                            obj.getString("user_password"),
++                            obj.getString("user_role"),
++                            obj.getString("user_email"),
++                            obj.getInt("age"),
++                            obj.getString("gender"),
++                            new ContactInformation(obj.getInt("phoneNum"), obj.getString("address")),
++                            obj.getInt("number_of_pets")
++
++
++
++                    ));
++
++                }
+                 users.add(new User(
+                         obj.getInt("id"),
+                         obj.getString("user_name"),
+@@ -134,6 +151,7 @@
+                         obj.getString("gender"),
+                         new ContactInformation(obj.getInt("phoneNum"), obj.getString("address"))
+ 
++
+                 ));
+             }
+         } catch (IOException e) {
+Index: Pet_Shelter/src/main/java/com/example/pet_shelter/AdoptionRequest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.pet_shelter;\r\nimport java.time.LocalDate;\r\nimport java.util.*;\r\nimport org.json.JSONArray;\r\nimport org.json.JSONObject;\r\n\r\nimport com.example.Exceptions.AlreadyFoundException;\r\nimport org.json.JSONArray;\r\nimport org.json.JSONObject;\r\nimport java.nio.file.Files;\r\nimport java.nio.file.Path;\r\nimport java.io.FileWriter;\r\nimport java.io.IOException;\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\nimport static com.example.pet_shelter.Main.*;\r\n\r\n\r\npublic class AdoptionRequest {\r\n    Integer adoptionId;\r\n    protected static int Next_ID=0;\r\n    protected Pet adoptedPet;\r\n    protected Adopter adopter;\r\n    protected LocalDate adoption_Date;\r\n    private AdoptionStatus adoption_status = AdoptionStatus.PENDED;\r\n\r\n\r\n    public AdoptionRequest(int id,Adopter u, Pet p,LocalDate d,AdoptionStatus ad) {\r\n//\r\n        this.adoptionId = id;\r\n        this.adopter = u;\r\n        this.adoptedPet = p;\r\n        this.adoption_Date =(d!=null)?d: LocalDate.now();\r\n        this.adoption_status =(d!=null)?ad: AdoptionStatus.PENDED;\r\n    }\r\n\r\n    public void setStatus(AdoptionStatus s) {\r\n        adoption_status = s;\r\n    }\r\n\r\n    public AdoptionStatus getStatus() {\r\n        return adoption_status;\r\n    }\r\n\r\n    public enum AdoptionStatus {\r\n        APPROVED, REJECTED, PENDED\r\n    }\r\n\r\n    //adoption request method\r\n    public static void adopt( Pet p) {\r\n       Next_ID= requests.getLast().adoptionId++;\r\n        AdoptionRequest newRequest = new AdoptionRequest(Next_ID,(Adopter)User.loggedInUser,p,null,null);\r\n        requests.add(newRequest);\r\n        System.out.println(\"your request have been submitted successfully \");// pop message in the GUI\r\n    }\r\n\r\n    //--------------------Admin methods--------------------\r\n    public static void displayPendedRequests() {\r\n        for(AdoptionRequest req:requests){\r\n            if(req.getStatus()==AdoptionStatus.PENDED){\r\n            System.out.println(\"Adoption ID: \" + req.adoptionId );\r\n            System.out.println(  \", Adopter: \" + req.adopter.getUserName());\r\n            System.out.println(  \", Pet: \" + req.adoptedPet.getName());\r\n            System.out.println(\", Status: \" + req.getStatus());}\r\n        }\r\n    }\r\n\r\n    public static void displayAllRequests() {\r\n        for(AdoptionRequest req:requests){\r\n            System.out.println(\"Adoption ID: \" + req.adoptionId );\r\n            System.out.println(  \", Adopter: \" + req.adopter.getUserName());\r\n            System.out.println(  \", Pet: \" + req.adoptedPet.getName());\r\n            System.out.println(\", Status: \" + req.getStatus());\r\n        }\r\n    }\r\n\r\n    // Method to reject the request\r\n    public void rejectRequest(AdoptionRequest request) {\r\n        request.setStatus(AdoptionStatus.REJECTED);\r\n        System.out.println(\"Adoption Request Rejected for Pet: \" + request.adoptedPet.getPetId());\r\n    }\r\n\r\n    // Method to approve the request\r\n    public void approveRequest(AdoptionRequest request) {\r\n        request.setStatus(AdoptionStatus.APPROVED);\r\n        System.out.println(\"Adoption Request Approved for Pet: \" + request.adoptedPet.getPetId());\r\n        request.adopter.requestAdoption(request.adoptedPet); //for adopter class\r\n        request.adopter.requestAdoption(request.adoptedPet);\r\n        //removing the accepted pet from the pets list\r\n        allPets.remove(request.adoptedPet);\r\n    }\r\n//------------------------------------------------------------\r\n\r\n    public static List<AdoptionRequest> readData() {\r\n       List<AdoptionRequest> adoptionRequests = new ArrayList<>();\r\n\r\n        try {\r\n            // Step 1: Specify file path and read data\r\n            Path path = Path.of(\"Requests.json\");\r\n            byte[] bytes = Files.readAllBytes(path);\r\n            String jsonString = new String(bytes);\r\n\r\n            // Step 2: Parse JSON array\r\n            JSONArray jsonArray = new JSONArray(jsonString);\r\n\r\n            // Step 3: Iterate through JSON objects\r\n            for (int i = 0; i < jsonArray.length(); i++) {\r\n                JSONObject obj = jsonArray.getJSONObject(i);\r\n\r\n                // Step 4: Extract adopter and pet details\r\n                JSONObject adopterObj = obj.getJSONObject(\"adopter\");\r\n                Adopter adopter = new Adopter(\r\n                        adopterObj.getInt(\"id\"),\r\n                        adopterObj.getString(\"user_name\"),\r\n                        adopterObj.getString(\"user_password\"),\r\n                        adopterObj.getString(\"user_role\"),\r\n                        adopterObj.getString(\"user_email\"),\r\n                        adopterObj.getInt(\"age\"),\r\n                        adopterObj.getString(\"gender\"),\r\n                        adopterObj.getInt(\"phoneNumber\"),\r\n                        adopterObj.getString(\"address\")\r\n                );\r\n\r\n                JSONObject petObj = obj.getJSONObject(\"adoptedPet\");\r\n                Pet adoptedPet = new Pet(\r\n                        petObj.getInt(\"petId\"),\r\n                        petObj.getString(\"name\"),\r\n                        petObj.getString(\"species\"),\r\n                        petObj.getString(\"breed\"),\r\n                        petObj.getInt(\"age\"),\r\n                        petObj.getString(\"healthStatus\")\r\n                );\r\n\r\n\r\n                AdoptionRequest request = new AdoptionRequest(\r\n                        obj.getInt(\"adoptionId\"),\r\n                        adopter,\r\n                        adoptedPet,\r\n                        LocalDate.parse(obj.getString(\"adoptionDate\")),\r\n                        AdoptionStatus.valueOf(obj.getString(\"adoptionStatus\"))\r\n                );\r\n\r\n\r\n                adoptionRequests.add(request);\r\n            }\r\n        } catch (IOException e) {\r\n            System.out.println(\"No data found\");\r\n        }\r\n\r\n\r\n        return adoptionRequests;\r\n    }\r\n\r\n    public static void writeData(List<AdoptionRequest> adoptionRequests) {\r\n        // Create a JSONArray to hold the data\r\n        JSONArray jsonArray = new JSONArray();\r\n\r\n        // Iterate over the list of AdoptionRequest objects and add them to the JSONArray\r\n        for (AdoptionRequest request : adoptionRequests) {\r\n            JSONObject obj = new JSONObject();\r\n\r\n            // Add the fields of the AdoptionRequest object to the JSON object\r\n            obj.put(\"adoptionId\", request.adoptionId);\r\n            obj.put(\"adopter\", new JSONObject()\r\n                    .put(\"id\", request.adopter.getId())\r\n                    .put(\"user_name\", request.adopter.getUserName())\r\n                    .put(\"user_password\",request.adopter.getUserPassword())\r\n                    .put(\"age\",request.adopter.getAge())\r\n                    .put(\"gender\",request.adopter.getGender())\r\n                    .put(\"phoneNumber\",request.adopter.getContactInfo().phoneNumber)\r\n                    .put(\"address\",request.adopter.getContactInfo().address)\r\n                    .put(\"user_role\", request.adopter.getUserRole())\r\n                    .put(\"user_email\", request.adopter.getUserEmail())\r\n            );\r\n\r\n            obj.put(\"adoptedPet\", new JSONObject()\r\n                    .put(\"petId\", request.adoptedPet.getPetId())\r\n                    .put(\"name\", request.adoptedPet.getName())\r\n                    .put(\"species\", request.adoptedPet.getSpecies())\r\n                    .put(\"breed\", request.adoptedPet.getBreed())\r\n                    .put(\"age\", request.adoptedPet.getAge())\r\n                    .put(\"healthStatus\", request.adoptedPet.getHealthStatus())\r\n            );\r\n\r\n            obj.put(\"adoptionDate\", request.adoption_Date.toString());\r\n            obj.put(\"adoptionStatus\", request.adoption_status.toString());\r\n\r\n            jsonArray.put(obj);\r\n        }\r\n\r\n        try (FileWriter file = new FileWriter(\"Requests.json\")) {\r\n            file.write(jsonArray.toString(4));\r\n            System.out.println(\"Adoption requests have been written to the file.\");\r\n        } catch (IOException e) {\r\n            e.printStackTrace();\r\n            System.out.println(\"Error writing to the file.\");\r\n        }\r\n    }\r\n}\r\n\r\n\r\n/*\r\nfor the notification part we have 2 options or we can make both :\r\nin the 2 options we need to add a list as an attribute to the user class\r\n\r\n1. make a section for each user called notification and display there the notifications of the current user\r\n\r\n2. (preferred option) when the user is logged in if he has a notification so it appears as a pop message\r\n\r\n */
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Pet_Shelter/src/main/java/com/example/pet_shelter/AdoptionRequest.java b/Pet_Shelter/src/main/java/com/example/pet_shelter/AdoptionRequest.java
+--- a/Pet_Shelter/src/main/java/com/example/pet_shelter/AdoptionRequest.java	(revision bd3f697fee33d9e7049c8156b99e7040851b5370)
++++ b/Pet_Shelter/src/main/java/com/example/pet_shelter/AdoptionRequest.java	(date 1734698994622)
+@@ -82,10 +82,11 @@
+ 
+     // Method to approve the request
+     public void approveRequest(AdoptionRequest request) {
++
+         request.setStatus(AdoptionStatus.APPROVED);
+         System.out.println("Adoption Request Approved for Pet: " + request.adoptedPet.getPetId());
+         request.adopter.requestAdoption(request.adoptedPet); //for adopter class
+-        request.adopter.requestAdoption(request.adoptedPet);
++
+         //removing the accepted pet from the pets list
+         allPets.remove(request.adoptedPet);
+     }
+@@ -200,7 +201,7 @@
+ 
+ 
+ /*
+-for the notification part we have 2 options or we can make both :
++for the notification part we have 2 options_or we can make both :
+ in the 2 options we need to add a list as an attribute to the user class
+ 
+ 1. make a section for each user called notification and display there the notifications of the current user
+Index: Pet_Shelter/src/main/java/com/example/pet_shelter/Adopter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.pet_shelter;\r\n\r\nimport java.util.ArrayList;\r\n\r\npublic class Adopter extends User {\r\n    public int numOfadoptedPets;\r\n    public ArrayList<Pet>adoptionHistory;\r\n    public ArrayList<Pet>currentPets;\r\n\r\n    public Adopter(int id, String user_name, String user_password, String user_role, String user_email, int age, String gender, int phoneNumber, String address) {\r\n        super(id, user_name, user_password, user_role, user_email, age, gender, new ContactInformation(phoneNumber, address));\r\n        this.numOfadoptedPets = 0;\r\n        this.adoptionHistory = new ArrayList<>();\r\n        this.currentPets = new ArrayList<>();\r\n    }\r\n\r\n    public Adopter(User user)\r\n    {\r\n        super(user.getId(), user.getUserName(), user.getUserPassword(), user.getUserRole(), user.getUserEmail(), user.getAge(), user.getGender(), user.getContactInfo());\r\n    }\r\n\r\n    public ArrayList<Pet> getAdoptionHistory() {\r\n        return adoptionHistory;\r\n    }\r\n\r\n    public ContactInformation getContactInfo() {\r\n        return contactInfo;\r\n    }\r\n\r\n    public  void requestAdoption(Pet pet){\r\n            adoptionHistory.add(pet);\r\n            numOfadoptedPets++;\r\n            currentPets.add(pet);\r\n    }\r\n\r\n    public void displayAdoptedPets() {\r\n        if (adoptionHistory.isEmpty()){\r\n            System.out.println(\"No pets adopted yet\");\r\n            return;}\r\n        else {\r\n            for (int i = 0; i < adoptionHistory.size(); i++) {\r\n                System.out.println(\"Pet number \" + (i + 1) + \"#\");\r\n                System.out.println(\"Pet id: \" + adoptionHistory.get(i).getPetId());\r\n                System.out.println(\"Pet name: \" + adoptionHistory.get(i).getName());\r\n                System.out.println(\"Pet age: \" + adoptionHistory.get(i).getAge());\r\n                System.out.println(\"Pet Health Status: \" + adoptionHistory.get(i).getHealthStatus());\r\n                System.out.println(\"------------\");\r\n            }\r\n            System.out.println();\r\n        }\r\n    }\r\n\r\n}\r\n\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Pet_Shelter/src/main/java/com/example/pet_shelter/Adopter.java b/Pet_Shelter/src/main/java/com/example/pet_shelter/Adopter.java
+--- a/Pet_Shelter/src/main/java/com/example/pet_shelter/Adopter.java	(revision bd3f697fee33d9e7049c8156b99e7040851b5370)
++++ b/Pet_Shelter/src/main/java/com/example/pet_shelter/Adopter.java	(date 1734701529135)
+@@ -3,13 +3,13 @@
+ import java.util.ArrayList;
+ 
+ public class Adopter extends User {
+-    public int numOfadoptedPets;
+-    public ArrayList<Pet>adoptionHistory;
++    public int numOfadoptedPets=0;
++    public ArrayList<AdoptionRequest>adoptionHistory;
+     public ArrayList<Pet>currentPets;
+ 
+-    public Adopter(int id, String user_name, String user_password, String user_role, String user_email, int age, String gender, int phoneNumber, String address) {
++    public Adopter(int id, String user_name, String user_password, String user_role, String user_email, int age, String gender, int phoneNumber, String address, int numOf_adoptedPets) {
+         super(id, user_name, user_password, user_role, user_email, age, gender, new ContactInformation(phoneNumber, address));
+-        this.numOfadoptedPets = 0;
++        this.numOfadoptedPets =numOf_adoptedPets ;
+         this.adoptionHistory = new ArrayList<>();
+         this.currentPets = new ArrayList<>();
+     }
+Index: Pet_Shelter/users.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>[\r\n    {\r\n        \"user_role\": \"admin\",\r\n        \"user_password\": \"1234\",\r\n        \"user_email\": \"Taha@gmail.com\",\r\n        \"address\": \"lolxd\",\r\n        \"gender\": \"male\",\r\n        \"user_name\": \"Taha\",\r\n        \"phoneNum\": 1110630831,\r\n        \"id\": 1,\r\n        \"age\": 19\r\n    },\r\n    {\r\n        \"user_role\": \"admin\",\r\n        \"user_password\": \"1234\",\r\n        \"user_email\": \"Asmaa@gmail.com\",\r\n        \"address\": \"Idk\",\r\n        \"gender\": \"female\",\r\n        \"user_name\": \"Asmaa\",\r\n        \"phoneNum\": 1112131455,\r\n        \"id\": 2,\r\n        \"age\": 18\r\n    },\r\n    {\r\n        \"user_role\": \"User\",\r\n        \"user_password\": \"1234\",\r\n        \"user_email\": \"lilac@gmail.com\",\r\n        \"address\": \"home\",\r\n        \"gender\": \"female\",\r\n        \"user_name\": \"lilac\",\r\n        \"phoneNum\": 123,\r\n        \"id\": 3,\r\n        \"age\": 18\r\n    },\r\n    {\r\n        \"user_role\": \"User\",\r\n        \"user_password\": \"1234\",\r\n        \"user_email\": \"7amada@gmail.com\",\r\n        \"address\": \"haram\",\r\n        \"gender\": \"male\",\r\n        \"user_name\": \"7amada\",\r\n        \"phoneNum\": 120,\r\n        \"id\": 232,\r\n        \"age\": 22\r\n    },\r\n    {\r\n        \"user_role\": \"User\",\r\n        \"user_password\": \"1234\",\r\n        \"user_email\": \"molan@gmail.com\",\r\n        \"address\": \"madinty\",\r\n        \"gender\": \"female\",\r\n        \"user_name\": \"molan\",\r\n        \"phoneNum\": 18373776,\r\n        \"id\": 99,\r\n        \"age\": 21\r\n    },\r\n    {\r\n        \"user_role\": \"User\",\r\n        \"user_password\": \"1234\",\r\n        \"user_email\": \"smsm@gmail.com\",\r\n        \"address\": \"shbeen\",\r\n        \"gender\": \"female\",\r\n        \"user_name\": \"smsm\",\r\n        \"phoneNum\": 12363736,\r\n        \"id\": 124,\r\n        \"age\": 30\r\n    }\r\n]
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Pet_Shelter/users.json b/Pet_Shelter/users.json
+--- a/Pet_Shelter/users.json	(revision bd3f697fee33d9e7049c8156b99e7040851b5370)
++++ b/Pet_Shelter/users.json	(date 1734699609223)
+@@ -8,7 +8,8 @@
+         "user_name": "Taha",
+         "phoneNum": 1110630831,
+         "id": 1,
+-        "age": 19
++        "age": 19,
++
+     },
+     {
+         "user_role": "admin",
+Index: Pet_Shelter/src/main/java/com/example/pet_shelter/AdminUser.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.pet_shelter;\r\n\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\npublic class AdminUser extends User {\r\n    private  List<String> adoptionRequests;\r\n    private  List<String> notifications;\r\n    private ArrayList<Adopter>adopterProfiles; //admin\r\n\r\n\r\n    // Constructor\r\n    public AdminUser(int id, String username, String password, String email, int age, String gender ,int phoneNum , String address) {\r\n        super(id, username, password, \"admin\", email, age, gender, new ContactInformation(phoneNum, address));\r\n        this.adoptionRequests = new ArrayList<>();\r\n        this.notifications = new ArrayList<>();\r\n        this.adopterProfiles = new ArrayList<>();\r\n\r\n    }\r\n\r\n    public AdminUser(User user)\r\n    {\r\n        super(user.getId(), user.getUserName(), user.getUserPassword(), \"admin\", user.getUserEmail(), user.getAge(), user.getGender(), user.contactInfo);\r\n\r\n    }\r\n\r\n    public void addAdopter(Adopter adopter){\r\n\r\n        adopterProfiles.add(adopter);\r\n        System.out.println(\"Adopter profile added: \" + adopter.getUserName());\r\n\r\n    }\r\n\r\n\r\n    public void editAdopter(Adopter adopterId, String newName,String newEmail,int newPhoneNumber){\r\n        for (Adopter adopter : adopterProfiles) {\r\n            if (adopter.equals(adopterId)) {\r\n                adopter.setUserName(newName);\r\n                adopter.setUserEmail(newEmail);\r\n                adopter.getContactInfo().phoneNumber = (newPhoneNumber);\r\n            }\r\n\r\n        }\r\n\r\n    }\r\n\r\n    public void deleteAdopter(int adopterId) {\r\n        for (int i=0;i<adopterProfiles.size();i++) {\r\n            if (adopterProfiles.get(i).getId() == adopterId) {\r\n                System.out.println(\"Adopter profile removed: \" + adopterProfiles.get(i).getUserName());\r\n                adopterProfiles.remove(i);\r\n                return;\r\n            }\r\n\r\n        }\r\n        System.out.println(\"couldn't find that id \");\r\n    }\r\n\r\n    public void displayAllAdopters(){\r\n        if (adopterProfiles.isEmpty()){\r\n            System.out.println(\"No adopters yet\");\r\n            return;\r\n        }\r\n        for (Adopter adopter:adopterProfiles){\r\n            System.out.println(\"Adopter ID: \" + adopter.getId());\r\n            System.out.println(\"Adopter Name: \" + adopter.getUserName());\r\n            System.out.println(\"Number of pets: \" + adopter.numOfadoptedPets);\r\n            System.out.println(\"--------------------\");\r\n            System.out.println();\r\n        }\r\n    }\r\n\r\n    // Handle adoption requests\r\n    public void addAdoptionRequest(String request) {\r\n        adoptionRequests.add(request);\r\n       // remember put this in GUI\r\n        System.out.println(\"Adoption request added: \" + request);\r\n    }\r\n\r\n    public void viewAdoptionRequests() {\r\n        System.out.println(\"Adoption Requests:\");\r\n        for (String request : adoptionRequests) {\r\n            System.out.println(\"- \" + request);\r\n        }\r\n    }\r\n\r\n    public void approveAdoptionRequest(String request) {\r\n        if (adoptionRequests.remove(request)) {\r\n            notifications.add(\"Request approved: \" + request);\r\n            System.out.println(\"Approved adoption request: \" + request);\r\n        } else {\r\n            System.out.println(\"Request not found: \" + request);\r\n        }\r\n    }\r\n\r\n    // Manage notifications\r\n    public void viewNotifications() {\r\n        System.out.println(\"Notifications:\");\r\n        for (String notification : notifications) {\r\n            System.out.println(\"- \" + notification);\r\n        }\r\n    }\r\n\r\n    public List<String> getAdoptionRequests() {\r\n        return adoptionRequests;\r\n    }\r\n\r\n    public List<String> getNotifications() {\r\n        return notifications;\r\n    } }\r\n//    public void clearNotifications() {\r\n//        notifications.clear();\r\n//        System.out.println(\"All notifications cleared.\");\r\n//    }\r\n//\r\n//    // Manage user accounts\r\n//    public void updateUserAccount(User user, String newUsername, String newPassword) {\r\n//        user.setUsername(newUsername);\r\n//        user.setPassword(newPassword);\r\n//        System.out.println(\"Updated account for user: \" + user.getUsername());\r\n//    }\r\n//\r\n//    public void deleteUserAccount(List<User> users, User user) {\r\n//        if (users.remove(user)) {\r\n//            System.out.println(\"Deleted account for user: \" + user.getUsername());\r\n//        } else {\r\n//            System.out.println(\"User not found.\");\r\n//        }\r\n//    }\r\n\r\n    // Override displayInfo\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Pet_Shelter/src/main/java/com/example/pet_shelter/AdminUser.java b/Pet_Shelter/src/main/java/com/example/pet_shelter/AdminUser.java
+--- a/Pet_Shelter/src/main/java/com/example/pet_shelter/AdminUser.java	(revision bd3f697fee33d9e7049c8156b99e7040851b5370)
++++ b/Pet_Shelter/src/main/java/com/example/pet_shelter/AdminUser.java	(date 1734653261796)
+@@ -5,7 +5,7 @@
+ 
+ public class AdminUser extends User {
+     private  List<String> adoptionRequests;
+-    private  List<String> notifications;
++    private static List<String> notifications;
+     private ArrayList<Adopter>adopterProfiles; //admin
+ 
+ 
+@@ -21,7 +21,9 @@
+     public AdminUser(User user)
+     {
+         super(user.getId(), user.getUserName(), user.getUserPassword(), "admin", user.getUserEmail(), user.getAge(), user.getGender(), user.contactInfo);
+-
++        this.adoptionRequests = new ArrayList<>();
++        this.notifications = new ArrayList<>();
++        this.adopterProfiles = new ArrayList<>();
+     }
+ 
+     public void addAdopter(Adopter adopter){
+@@ -88,13 +90,14 @@
+         if (adoptionRequests.remove(request)) {
+             notifications.add("Request approved: " + request);
+             System.out.println("Approved adoption request: " + request);
++
+         } else {
+             System.out.println("Request not found: " + request);
+         }
+     }
+ 
+     // Manage notifications
+-    public void viewNotifications() {
++    public static void viewNotifications() {
+         System.out.println("Notifications:");
+         for (String notification : notifications) {
+             System.out.println("- " + notification);
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ExternalStorageConfigurationManager\" enabled=\"true\" />\r\n  <component name=\"MavenProjectsManager\">\r\n    <option name=\"originalFiles\">\r\n      <list>\r\n        <option value=\"$PROJECT_DIR$/Pet_Shelter/pom.xml\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_22\" default=\"true\" project-jdk-name=\"22\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/out\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision bd3f697fee33d9e7049c8156b99e7040851b5370)
++++ b/.idea/misc.xml	(date 1734653486329)
+@@ -8,7 +8,7 @@
+       </list>
+     </option>
+   </component>
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_22" default="true" project-jdk-name="22" project-jdk-type="JavaSDK">
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_22" default="true" project-jdk-name="22 (2)" project-jdk-type="JavaSDK">
+     <output url="file://$PROJECT_DIR$/out" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: Pet_Shelter/src/main/java/com/example/pet_shelter/NotificationManager.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Pet_Shelter/src/main/java/com/example/pet_shelter/NotificationManager.java b/Pet_Shelter/src/main/java/com/example/pet_shelter/NotificationManager.java
+new file mode 100644
+--- /dev/null	(date 1734653303918)
++++ b/Pet_Shelter/src/main/java/com/example/pet_shelter/NotificationManager.java	(date 1734653303918)
+@@ -0,0 +1,74 @@
++package com.example.pet_shelter;
++
++import org.json.JSONArray;
++import org.json.JSONObject;
++
++import java.io.*;
++import java.util.ArrayList;
++import java.util.List;
++
++public class NotificationManager {
++    private List<String> notifications;
++    private final String filePath; // Path to store notifications
++
++    // Constructor
++    public NotificationManager(String filePath) {
++        this.filePath = filePath;
++        this.notifications = new ArrayList<>();
++        loadNotificationsFromFile();
++    }
++
++    // Add a new notification
++    public void addNotification(String message) {
++        notifications.add(message);
++        System.out.println("Notification added: " + message);
++    }
++
++    // Get all notifications
++    public List<String> getNotifications() {
++        return notifications;
++    }
++
++    // Save notifications to a JSON file
++    public void saveNotificationsToFile() {
++        JSONArray jsonArray = new JSONArray();
++        for (String notification : notifications) {
++            JSONObject obj = new JSONObject();
++            obj.put("message", notification);
++            jsonArray.put(obj);
++        }
++
++        try (FileWriter writer = new FileWriter(filePath)) {
++            writer.write(jsonArray.toString(4)); // Indented JSON format
++            System.out.println("Notifications saved to file.");
++        } catch (IOException e) {
++            System.out.println("Error saving notifications: " + e.getMessage());
++        }
++    }
++
++    // Load notifications from a JSON file
++    private void loadNotificationsFromFile() {
++        File file = new File(filePath);
++        if (!file.exists()) {
++            System.out.println("No existing notification file found.");
++            return;
++        }
++
++        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
++            StringBuilder jsonString = new StringBuilder();
++            String line;
++            while ((line = reader.readLine()) != null) {
++                jsonString.append(line);
++            }
++
++            JSONArray jsonArray = new JSONArray(jsonString.toString());
++            for (int i = 0; i < jsonArray.length(); i++) {
++                JSONObject obj = jsonArray.getJSONObject(i);
++                notifications.add(obj.getString("message"));
++            }
++            System.out.println("Notifications loaded from file.");
++        } catch (IOException e) {
++            System.out.println("Error loading notifications: " + e.getMessage());
++        }
++    }
++}
+Index: Pets.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>[{\"ImgSource\":\"file:/C:/Users/Taha/IdeaProjects/Pet_Shelter_Git/Pet_Shelter/src/main/resources/Photos/Dog.png\",\"species\":\"Dog\",\"healthStatus\":\"Healthy\",\"name\":\"Doggo\",\"id\":0,\"breed\":\"Dog\",\"age\":4},{\"ImgSource\":\"file:/C:/Users/Taha/IdeaProjects/Pet_Shelter_Git/Pet_Shelter/src/main/resources/Photos/Dog.png\",\"species\":\"Dog\",\"healthStatus\":\"Healthy\",\"name\":\"Doo\",\"id\":1,\"breed\":\"Dog\",\"age\":4},{\"ImgSource\":\"file:/C:/Users/Taha/IdeaProjects/Pet_Shelter_Git/Pet_Shelter/src/main/resources/Photos/Dog.png\",\"species\":\"Dog\",\"healthStatus\":\"Healthy\",\"name\":\"Doggo\",\"id\":2,\"breed\":\"Dog\",\"age\":4},{\"ImgSource\":\"file:/C:/Users/Taha/IdeaProjects/Pet_Shelter_Git/Pet_Shelter/src/main/resources/Photos/Cat.png\",\"species\":\"Cat\",\"healthStatus\":\"healthy\",\"name\":\"Catter\",\"id\":3,\"breed\":\"Cat\",\"age\":4}]
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Pets.json b/Pets.json
+--- a/Pets.json	(revision bd3f697fee33d9e7049c8156b99e7040851b5370)
++++ b/Pets.json	(date 1734655313048)
+@@ -1,1 +1,1 @@
+-[{"ImgSource":"file:/C:/Users/Taha/IdeaProjects/Pet_Shelter_Git/Pet_Shelter/src/main/resources/Photos/Dog.png","species":"Dog","healthStatus":"Healthy","name":"Doggo","id":0,"breed":"Dog","age":4},{"ImgSource":"file:/C:/Users/Taha/IdeaProjects/Pet_Shelter_Git/Pet_Shelter/src/main/resources/Photos/Dog.png","species":"Dog","healthStatus":"Healthy","name":"Doo","id":1,"breed":"Dog","age":4},{"ImgSource":"file:/C:/Users/Taha/IdeaProjects/Pet_Shelter_Git/Pet_Shelter/src/main/resources/Photos/Dog.png","species":"Dog","healthStatus":"Healthy","name":"Doggo","id":2,"breed":"Dog","age":4},{"ImgSource":"file:/C:/Users/Taha/IdeaProjects/Pet_Shelter_Git/Pet_Shelter/src/main/resources/Photos/Cat.png","species":"Cat","healthStatus":"healthy","name":"Catter","id":3,"breed":"Cat","age":4}]
+\ No newline at end of file
++[{"ImgSource":"file:/C:/Users/mohamed%20sameh/Desktop/Pet_Shelter/Pet_Shelter/src/main/resources/Photos/Dog.png","species":"Dog","healthStatus":"Healthy","name":"Doggo","id":0,"breed":"Dog","age":4},{"ImgSource":"file:/C:/Users/mohamed%20sameh/Desktop/Pet_Shelter/Pet_Shelter/src/main/resources/Photos/Dog.png","species":"Dog","healthStatus":"Healthy","name":"Doo","id":1,"breed":"Dog","age":4},{"ImgSource":"file:/C:/Users/mohamed%20sameh/Desktop/Pet_Shelter/Pet_Shelter/src/main/resources/Photos/Dog.png","species":"Dog","healthStatus":"Healthy","name":"Doggo","id":2,"breed":"Dog","age":4},{"ImgSource":"file:/C:/Users/mohamed%20sameh/Desktop/Pet_Shelter/Pet_Shelter/src/main/resources/Photos/Cat.png","species":"Cat","healthStatus":"healthy","name":"Catter","id":3,"breed":"Cat","age":4}]
+\ No newline at end of file
+Index: Pet_Shelter/src/main/resources/FXML/NotificationsView.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Pet_Shelter/src/main/resources/FXML/NotificationsView.java b/Pet_Shelter/src/main/resources/FXML/NotificationsView.java
+new file mode 100644
+--- /dev/null	(date 1734653261808)
++++ b/Pet_Shelter/src/main/resources/FXML/NotificationsView.java	(date 1734653261808)
+@@ -0,0 +1,5 @@
++package FXML;
++
++public class NotificationsView {
++
++}
+Index: Pet_Shelter/src/main/resources/FXML/notifications-view.fxml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Pet_Shelter/src/main/resources/FXML/notifications-view.fxml b/Pet_Shelter/src/main/resources/FXML/notifications-view.fxml
+new file mode 100644
+--- /dev/null	(date 1734653261817)
++++ b/Pet_Shelter/src/main/resources/FXML/notifications-view.fxml	(date 1734653261817)
+@@ -0,0 +1,14 @@
++<?xml version="1.0" encoding="UTF-8"?>
++
++<?import java.lang.*?>
++<?import java.util.*?>
++<?import javafx.scene.*?>
++<?import javafx.scene.control.*?>
++<?import javafx.scene.layout.*?>
++
++<AnchorPane xmlns="http://javafx.com/javafx"
++            xmlns:fx="http://javafx.com/fxml"
++            fx:controller="FXML.NotificationsView"
++            prefHeight="400.0" prefWidth="600.0">
++
++</AnchorPane>

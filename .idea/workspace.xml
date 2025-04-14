@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="cd279b3e-3d10-44a2-87aa-80338e4e5106" name="Changes" comment="AboSameh has added history and current pets to each adopterrrrr">
+      <change beforePath="$PROJECT_DIR$/Pet_Shelter/src/main/java/com/example/pet_shelter/AdminUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/Pet_Shelter/src/main/java/com/example/pet_shelter/AdminUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pet_Shelter/target/classes/main/resources/FXML/program-view.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/Pet_Shelter/target/classes/main/resources/FXML/program-view.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Requests.json" beforeDir="false" afterPath="$PROJECT_DIR$/Requests.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Shelters.json" beforeDir="false" afterPath="$PROJECT_DIR$/Shelters.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/users.json" beforeDir="false" afterPath="$PROJECT_DIR$/users.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="FxmlFile" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="GUI" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;MohammedSameh2&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Taha-M0stafa/Pet_Shelter.git&quot;,
+    &quot;accountId&quot;: &quot;377ea654-dee1-473d-b5b3-c9e8780e3f9c&quot;
+  }
+}</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="QODANA_PROBLEMS_VIEW_TAB" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="2pnWI5nrYK36ns78mWW69gs7nHj" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.Main.executor": "Run",
+    "Application.Unnamed.executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "#5 on GUI",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/mohamed sameh/Desktop/openjfx-23.0.1_windows-x64_bin-sdk (1)/javafx-sdk-23.0.1/lib",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "org.jetbrains.plugins.github.ui.GithubSettingsConfigurable"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\mohamed sameh\Desktop\Pet_Shelter\Pet_Shelter\src\main\java\com\example\pet_shelter" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="Main" type="Application" factoryName="Application" singleton="false" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="22 (2)" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="com.example.pet_shelter.Main" />
+      <module name="Pet_Shelter" />
+      <option name="VM_PARAMETERS" value="--module-path &quot;C:\Users\mohamed sameh\Desktop\openjfx-23.0.1_windows-x64_bin-sdk (1)\javafx-sdk-23.0.1\lib&quot; --add-modules javafx.controls,javafx.fxml" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="cd279b3e-3d10-44a2-87aa-80338e4e5106" name="Changes" comment="" />
+      <created>1733402236442</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1733402236442</updated>
+    </task>
+    <task id="LOCAL-00001" summary="AboSameh">
+      <option name="closed" value="true" />
+      <created>1734710170067</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1734710170067</updated>
+    </task>
+    <task id="LOCAL-00002" summary="AboSameh has added history and current pets to each adopterrrrr">
+      <option name="closed" value="true" />
+      <created>1734718617043</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1734718617043</updated>
+    </task>
+    <task id="LOCAL-00003" summary="AboSameh has added history and current pets to each adopterrrrr">
+      <option name="closed" value="true" />
+      <created>1734743926034</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1734743926034</updated>
+    </task>
+    <task id="LOCAL-00004" summary="AboSameh has added history and current pets to each adopterrrrr">
+      <option name="closed" value="true" />
+      <created>1734743985481</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1734743985481</updated>
+    </task>
+    <task id="LOCAL-00005" summary="AboSameh has added history and current pets to each adopterrrrr">
+      <option name="closed" value="true" />
+      <created>1734744419172</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1734744419172</updated>
+    </task>
+    <task id="LOCAL-00006" summary="AboSameh has added history and current pets to each adopterrrrr">
+      <option name="closed" value="true" />
+      <created>1734745367569</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1734745367569</updated>
+    </task>
+    <task id="LOCAL-00007" summary="AboSameh has added history and current pets to each adopterrrrr">
+      <option name="closed" value="true" />
+      <created>1734746269385</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1734746269385</updated>
+    </task>
+    <task id="LOCAL-00008" summary="AboSameh has added history and current pets to each adopterrrrr">
+      <option name="closed" value="true" />
+      <created>1734776053225</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1734776053225</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="AboSameh" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/GUI' into GUI&#10;&#10;# Conflicts:&#10;#&#9;Requests.json&#10;#&#9;users.json" />
+    <MESSAGE value="AboSameh has added history and current pets to each adopterrrrr" />
+    <option name="LAST_COMMIT_MESSAGE" value="AboSameh has added history and current pets to each adopterrrrr" />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/Pet_Shelter$Main.ic" NAME="Main Coverage Results" MODIFIED="1734644318334" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="true" />
+  </component>
+</project>

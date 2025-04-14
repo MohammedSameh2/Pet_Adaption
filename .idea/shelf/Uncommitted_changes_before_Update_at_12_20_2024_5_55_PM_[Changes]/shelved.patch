@@ -1,0 +1,920 @@
+Index: Pet_Shelter/src/main/java/com/example/pet_shelter/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>//\r\n// Source code recreated from a .class file by IntelliJ IDEA\r\n// (powered by FernFlower decompiler)\r\n//\r\npackage com.example.pet_shelter;\r\n\r\nimport javafx.application.Application;\r\nimport javafx.fxml.FXMLLoader;\r\nimport javafx.scene.Parent;\r\nimport javafx.scene.Scene;\r\nimport javafx.stage.Stage;\r\n\r\nimport java.io.IOException;\r\nimport java.util.List;\r\nimport java.util.Objects;\r\n\r\npublic class Main extends Application {\r\n    public static List<User> currentUsers;\r\n    public static List<Pet> allPets;\r\n    public static List<AdoptionRequest> requests;\r\n    public static Stage changeStage;\r\n\r\n\r\n    public Main() {\r\n    }\r\n\r\n    public void start(Stage stage) throws IOException {\r\n        stage.resizableProperty().setValue(Boolean.TRUE);\r\n\r\n\r\n        stage.setWidth(1000);\r\n        stage.setHeight(1000);\r\n\r\n\r\n        changeStage = stage;\r\n        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(\"/FXML/login-view.fxml\"));\r\n        Scene scene = new Scene(fxmlLoader.load());\r\n        stage.setTitle(\"Salutations\");\r\n        stage.setScene(scene);\r\n        stage.show();}\r\n\r\n\r\n\r\n\r\n    public void changeScene(String FXML) throws IOException {\r\n        Parent changeRoot = FXMLLoader.load(Objects.requireNonNull(this.getClass().getResource(FXML)));\r\n        changeStage.getScene().setRoot(changeRoot);\r\n        changeStage.setWidth(1000);\r\n        changeStage.setHeight(1000);\r\n        changeStage.show();\r\n    }\r\n\r\n    public static void main(String[] args) {\r\n        ReadAllData();\r\n        launch();\r\n        WriteAllData();\r\n    }\r\n\r\n    public static void ReadAllData() {\r\n        currentUsers = User.readData();\r\n        allPets = Pet.readData();\r\n        requests=AdoptionRequest.readData();\r\n\r\n    }\r\n\r\n    public static void WriteAllData() {\r\n        User.writeData(currentUsers);\r\n        Pet.writeData(allPets);\r\n        AdoptionRequest.writeData(requests);\r\n    }\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Pet_Shelter/src/main/java/com/example/pet_shelter/Main.java b/Pet_Shelter/src/main/java/com/example/pet_shelter/Main.java
+--- a/Pet_Shelter/src/main/java/com/example/pet_shelter/Main.java	(revision bd3f697fee33d9e7049c8156b99e7040851b5370)
++++ b/Pet_Shelter/src/main/java/com/example/pet_shelter/Main.java	(date 1734702121956)
+@@ -15,7 +15,7 @@
+ import java.util.Objects;
+ 
+ public class Main extends Application {
+-    public static List<User> currentUsers;
++    public static List<Adopter> currentUsers;
+     public static List<Pet> allPets;
+     public static List<AdoptionRequest> requests;
+     public static Stage changeStage;
+@@ -28,8 +28,6 @@
+         stage.resizableProperty().setValue(Boolean.TRUE);
+ 
+ 
+-        stage.setWidth(1000);
+-        stage.setHeight(1000);
+ 
+ 
+         changeStage = stage;
+@@ -40,13 +38,9 @@
+         stage.show();}
+ 
+ 
+-
+-
+     public void changeScene(String FXML) throws IOException {
+         Parent changeRoot = FXMLLoader.load(Objects.requireNonNull(this.getClass().getResource(FXML)));
+         changeStage.getScene().setRoot(changeRoot);
+-        changeStage.setWidth(1000);
+-        changeStage.setHeight(1000);
+         changeStage.show();
+     }
+ 
+@@ -57,10 +51,9 @@
+     }
+ 
+     public static void ReadAllData() {
+-        currentUsers = User.readData();
++        currentUsers = Adopter.readData();
+         allPets = Pet.readData();
+         requests=AdoptionRequest.readData();
+-
+     }
+ 
+     public static void WriteAllData() {
+Index: Pet_Shelter/src/main/java/com/example/pet_shelter/User.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.pet_shelter;\r\n\r\nimport com.example.Exceptions.AlreadyFoundException;\r\nimport org.json.JSONArray;\r\nimport org.json.JSONObject;\r\nimport java.nio.file.Files;\r\nimport java.nio.file.Path;\r\nimport java.io.FileWriter;\r\nimport java.io.IOException;\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n//My Fav User Ever Go To Hell\r\npublic class User {\r\n    final int id;\r\n    private String user_name;\r\n    private String user_password;\r\n    private String user_role;\r\n    private String user_email;\r\n    private int age;\r\n    private String gender;\r\n    public ContactInformation contactInfo;\r\n\r\n    // File to store user data\r\n    private static final String FILE_NAME = \"users.json\";\r\n    public static User loggedInUser;\r\n\r\n    public User(int id, String user_name, String user_password, String user_role, String user_email, int age, String gender, ContactInformation contactInfo) {\r\n\r\n        this.id = id;\r\n        this.user_name = user_name;\r\n        this.user_password = user_password;\r\n        this.user_role = user_role;\r\n        this.user_email = user_email;\r\n        this.age = age;\r\n        this.gender = gender;\r\n        this.contactInfo = contactInfo;\r\n\r\n    }\r\n\r\n    // Getters and setters\r\n    public String getUserName() {\r\n        return user_name;\r\n    }\r\n\r\n    public void setUserName(String user_name) {\r\n        this.user_name = user_name;\r\n    }\r\n\r\n    public String getUserPassword() {\r\n        return user_password;\r\n    }\r\n\r\n    public void setUserPassword(String user_password) {\r\n        this.user_password = user_password;\r\n    }\r\n\r\n    public String getUserRole() {\r\n        return user_role;\r\n    }\r\n\r\n    public void setUserRole(String user_role) {\r\n        this.user_role = user_role;\r\n    }\r\n\r\n    public String getUserEmail() {\r\n        return user_email;\r\n    }\r\n\r\n    public void setUserEmail(String user_email) {\r\n        this.user_email = user_email;\r\n    }\r\n\r\n    public int getId() {return id;}\r\n    public int getAge() {return age;}\r\n    public void setAge(int age) {this.age = age;}\r\n    public String getGender() {return gender;}\r\n    public void setGender(String gender) {this.gender = gender;}\r\n\r\n    // Login method__\r\n    public static boolean login(String userName, String password) throws AlreadyFoundException {\r\n\r\n\r\n        for (User user : Main.currentUsers) {\r\n            if (user.getUserName().equals(userName) && user.getUserPassword().equals(password)) {\r\n                System.out.println(\"Login successful أهلا بيك\");\r\n                loggedInUser = user;\r\n                if(loggedInUser.getUserRole().equals(\"admin\"))\r\n                {\r\n                    loggedInUser = new AdminUser(user);\r\n                }\r\n                return true;\r\n            }\r\n        }\r\n        throw new AlreadyFoundException(\"Invalid password حاول مرة اخرى ربنا يكرمك\");\r\n    }\r\n\r\n\r\n\r\n    // Register method__\r\n    public static void register(User newUser) throws AlreadyFoundException {\r\n\r\n        for (User user : Main.currentUsers) {\r\n            if (user.getUserEmail().equals(newUser.getUserEmail())) {\r\n                throw new AlreadyFoundException(\"Email already registered.\");\r\n            }\r\n            else if(user.getId() == newUser.getId()) {\r\n                throw new AlreadyFoundException(\"ID already registered.\");\r\n            }\r\n        }\r\n        Main.currentUsers.add(newUser);\r\n        System.out.println(\"Registration successful!\");\r\n    }\r\n\r\n    // Generic function to read user data from JSON file\r\n    public static List<User> readData() {\r\n        List<User> users = new ArrayList<>();\r\n        try {\r\n            // Specify the file path\r\n            Path path = Path.of(\"Pet_Shelter/users.json\");\r\n            byte[] bytes = Files.readAllBytes(path);\r\n            String jsonString = new String(bytes);\r\n            JSONArray jsonArray = new JSONArray(jsonString);\r\n\r\n            // Iterate through the array and add User objects\r\n            for (int i = 0; i < jsonArray.length(); i++) {\r\n                JSONObject obj = jsonArray.getJSONObject(i);\r\n                users.add(new User(\r\n                        obj.getInt(\"id\"),\r\n                        obj.getString(\"user_name\"),\r\n                        obj.getString(\"user_password\"),\r\n                        obj.getString(\"user_role\"),\r\n                        obj.getString(\"user_email\"),\r\n                        obj.getInt(\"age\"),\r\n                        obj.getString(\"gender\"),\r\n                        new ContactInformation(obj.getInt(\"phoneNum\"), obj.getString(\"address\"))\r\n\r\n                ));\r\n            }\r\n        } catch (IOException e) {\r\n            System.out.println(\"No data file found. Creating a new one...\");\r\n        }\r\n        return users;\r\n    }\r\n\r\n    // Generic function to write user data to JSON file\r\n    public static void writeData(List<User> users) {\r\n        JSONArray jsonArray = new JSONArray();\r\n\r\n        for (User user : users) {\r\n            JSONObject obj = new JSONObject();\r\n            obj.put(\"id\", user.getId());\r\n            obj.put(\"user_name\", user.getUserName());\r\n            obj.put(\"user_password\", user.getUserPassword());\r\n            obj.put(\"user_role\", user.getUserRole());\r\n            obj.put(\"user_email\", user.getUserEmail());\r\n            obj.put(\"phoneNum\", user.getContactInfo().getPhoneNumber());\r\n            obj.put(\"address\", user.getContactInfo().getAddress());\r\n            obj.put(\"gender\", user.getGender());\r\n            obj.put(\"age\", user.getAge());\r\n            jsonArray.put(obj);\r\n        }\r\n\r\n        try (FileWriter writer = new FileWriter(FILE_NAME)) {\r\n            // Format 4 spaces\r\n            writer.write(jsonArray.toString(4));\r\n        } catch (IOException e) {\r\n            System.out.println(\"Error writing data to file: \" + e.getMessage());\r\n        }\r\n    }\r\n\r\n\r\n\r\n    // to use in the search for both users and admins\r\n    public void displayAllPets(ArrayList <Pet> pets){\r\n        if (pets.isEmpty()){\r\n            System.out.println(\"No Pets yet\");\r\n            return;\r\n        }\r\n        for (Pet pet : pets) {\r\n            System.out.println(\"Pet ID: \" + pet.getPetId());\r\n            System.out.println(\"Name: \" + pet.getName());\r\n            System.out.println(\"Age: \" + pet.getAge());\r\n            System.out.println(\"Breed: \" + pet.getBreed());\r\n        }\r\n    }\r\n\r\n    public ContactInformation getContactInfo(){return contactInfo;}\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Pet_Shelter/src/main/java/com/example/pet_shelter/User.java b/Pet_Shelter/src/main/java/com/example/pet_shelter/User.java
+--- a/Pet_Shelter/src/main/java/com/example/pet_shelter/User.java	(revision bd3f697fee33d9e7049c8156b99e7040851b5370)
++++ b/Pet_Shelter/src/main/java/com/example/pet_shelter/User.java	(date 1734709595940)
+@@ -7,8 +7,10 @@
+ import java.nio.file.Path;
+ import java.io.FileWriter;
+ import java.io.IOException;
++import java.time.LocalDate;
+ import java.util.ArrayList;
+ import java.util.List;
++
+ //My Fav User Ever Go To Hell
+ public class User {
+     final int id;
+@@ -20,6 +22,7 @@
+     private String gender;
+     public ContactInformation contactInfo;
+ 
++
+     // File to store user data
+     private static final String FILE_NAME = "users.json";
+     public static User loggedInUser;
+@@ -80,7 +83,7 @@
+     public static boolean login(String userName, String password) throws AlreadyFoundException {
+ 
+ 
+-        for (User user : Main.currentUsers) {
++        for (Adopter user : Main.currentUsers) {
+             if (user.getUserName().equals(userName) && user.getUserPassword().equals(password)) {
+                 System.out.println("Login successful أهلا بيك");
+                 loggedInUser = user;
+@@ -107,16 +110,16 @@
+                 throw new AlreadyFoundException("ID already registered.");
+             }
+         }
+-        Main.currentUsers.add(newUser);
++        Main.currentUsers.add((Adopter)newUser);
+         System.out.println("Registration successful!");
+     }
+ 
+     // Generic function to read user data from JSON file
+-    public static List<User> readData() {
+-        List<User> users = new ArrayList<>();
++    public static List<Adopter> readData() {
++        List<Adopter> users = new ArrayList<Adopter>();
+         try {
+             // Specify the file path
+-            Path path = Path.of("Pet_Shelter/users.json");
++            Path path = Path.of("users.json");
+             byte[] bytes = Files.readAllBytes(path);
+             String jsonString = new String(bytes);
+             JSONArray jsonArray = new JSONArray(jsonString);
+@@ -124,7 +127,7 @@
+             // Iterate through the array and add User objects
+             for (int i = 0; i < jsonArray.length(); i++) {
+                 JSONObject obj = jsonArray.getJSONObject(i);
+-                users.add(new User(
++                Adopter adopter = new Adopter(
+                         obj.getInt("id"),
+                         obj.getString("user_name"),
+                         obj.getString("user_password"),
+@@ -132,9 +135,60 @@
+                         obj.getString("user_email"),
+                         obj.getInt("age"),
+                         obj.getString("gender"),
+-                        new ContactInformation(obj.getInt("phoneNum"), obj.getString("address"))
++                        obj.getInt("phoneNum"), obj.getString("address")
++
++
++                );
++                // Populate adoption history
++                {
++                    JSONArray historyArray = obj.getJSONArray("adoptionHistory");
++                    for (int j = 0; j < historyArray.length(); j++) {
++                        JSONObject requestObj = historyArray.getJSONObject(j);
++
++                        JSONObject petObj = requestObj.getJSONObject("adoptedPet");
++                        Pet adoptedPet = new Pet(
++                                petObj.getInt("petId"),
++                                petObj.getString("name"),
++                                petObj.getString("species"),
++                                petObj.getString("breed"),
++                                petObj.getInt("age"),
++                                petObj.getString("healthStatus")
++                        );
++
++                        // Parse adoption date
++                        LocalDate adoptionDate = LocalDate.parse(requestObj.getString("adoption_Date"));
++                        // Parse adoption status
++                        AdoptionRequest.AdoptionStatus adoptionStatus = AdoptionRequest.AdoptionStatus.valueOf(requestObj.getString("adoption_status"));
+ 
+-                ));
++                        // Create AdoptionRequest object
++                        AdoptionRequest request = new AdoptionRequest(
++                                requestObj.getInt("adoptionId"),
++                                adopter,
++                                adoptedPet,
++                                adoptionDate,
++                                adoptionStatus
++                        );
++
++                        adopter.adoptionHistory.add(request);
++                    }
++                     {
++                        JSONArray currentArray = obj.getJSONArray("currentPets");
++                        for (int j = 0; j < currentArray.length(); j++) {
++                            JSONObject petObj = currentArray.getJSONObject(j);
++                            Pet pet = new Pet(
++                                    petObj.getInt("petId"),
++                                    petObj.getString("name"),
++                                    petObj.getString("species"),
++                                    petObj.getString("breed"),
++                                    petObj.getInt("age"),
++                                    petObj.getString("healthStatus")
++                            );
++                            adopter.currentPets.add(pet);
++                        }
++                    }
++                }
++                users.add(adopter);
++
+             }
+         } catch (IOException e) {
+             System.out.println("No data file found. Creating a new one...");
+@@ -143,25 +197,63 @@
+     }
+ 
+     // Generic function to write user data to JSON file
+-    public static void writeData(List<User> users) {
++    public static void writeData(List<Adopter> users) {
+         JSONArray jsonArray = new JSONArray();
+ 
+-        for (User user : users) {
++        for (Adopter adopter : users) {
+             JSONObject obj = new JSONObject();
+-            obj.put("id", user.getId());
+-            obj.put("user_name", user.getUserName());
+-            obj.put("user_password", user.getUserPassword());
+-            obj.put("user_role", user.getUserRole());
+-            obj.put("user_email", user.getUserEmail());
+-            obj.put("phoneNum", user.getContactInfo().getPhoneNumber());
+-            obj.put("address", user.getContactInfo().getAddress());
+-            obj.put("gender", user.getGender());
+-            obj.put("age", user.getAge());
++            obj.put("id", adopter.getId());
++            obj.put("user_name", adopter.getUserName());
++            obj.put("user_password", adopter.getUserPassword());
++            obj.put("user_role", adopter.getUserRole());
++            obj.put("user_email", adopter.getUserEmail());
++            obj.put("phoneNum", adopter.getContactInfo().getPhoneNumber());
++            obj.put("address", adopter.getContactInfo().getAddress());
++            obj.put("gender", adopter.getGender());
++            obj.put("age", adopter.getAge());
++
++            // Write adoption history
++            JSONArray adoptionHistoryArray = new JSONArray();
++            for (AdoptionRequest request : adopter.adoptionHistory) {
++                JSONObject requestObj = new JSONObject();
++
++                // Write adoptedPet details
++                JSONObject petObj = new JSONObject();
++                petObj.put("petId", request.adoptedPet.getPetId());
++                petObj.put("name", request.adoptedPet.getName());
++                petObj.put("species", request.adoptedPet.getSpecies());
++                petObj.put("breed", request.adoptedPet.getBreed());
++                petObj.put("age", request.adoptedPet.getAge());
++                petObj.put("healthStatus",request.adoptedPet.getHealthStatus());
++
++                requestObj.put("adoptedPet", petObj);
++                requestObj.put("adoptionId", request.adoptionId);
++                requestObj.put("adoption_Date", request.adoption_Date.toString());
++                requestObj.put("adoption_status", request.getStatus().toString());
++
++                adoptionHistoryArray.put(requestObj);
++            }
++            obj.put("adoptionHistory", adoptionHistoryArray);
++
++            // Write currentPets
++            JSONArray currentPetsArray = new JSONArray();
++            for (Pet pet : adopter.currentPets) {
++                JSONObject petObj = new JSONObject();
++                petObj.put("petId", pet.getPetId());
++                petObj.put("name", pet.getName());
++                petObj.put("species", pet.getSpecies());
++                petObj.put("breed", pet.getBreed());
++                petObj.put("age", pet.getAge());
++                petObj.put("healthStatus",pet.getHealthStatus());
++                currentPetsArray.put(petObj);
++            }
++            obj.put("currentPets", currentPetsArray);
++
+             jsonArray.put(obj);
+         }
+ 
+-        try (FileWriter writer = new FileWriter(FILE_NAME)) {
+-            // Format 4 spaces
++        try (FileWriter writer = new FileWriter("users.json")) {
++            // Format with 4 spaces
+             writer.write(jsonArray.toString(4));
+         } catch (IOException e) {
+             System.out.println("Error writing data to file: " + e.getMessage());
+@@ -169,7 +261,6 @@
+     }
+ 
+ 
+-
+     // to use in the search for both users and admins
+     public void displayAllPets(ArrayList <Pet> pets){
+         if (pets.isEmpty()){
+@@ -185,5 +276,4 @@
+     }
+ 
+     public ContactInformation getContactInfo(){return contactInfo;}
+-}
+-
++}
+\ No newline at end of file
+Index: Pet_Shelter/src/main/resources/FXML/program-view.fxml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n\r\n<?import javafx.geometry.Insets?>\r\n<?import javafx.scene.control.Button?>\r\n<?import javafx.scene.control.Label?>\r\n<?import javafx.scene.control.ScrollPane?>\r\n<?import javafx.scene.image.Image?>\r\n<?import javafx.scene.image.ImageView?>\r\n<?import javafx.scene.layout.AnchorPane?>\r\n<?import javafx.scene.layout.GridPane?>\r\n<?import javafx.scene.layout.HBox?>\r\n<?import javafx.scene.layout.RowConstraints?>\r\n<?import javafx.scene.layout.VBox?>\r\n<?import javafx.scene.text.Font?>\r\n\r\n<AnchorPane fx:id=\"mainAnchorPane\" maxHeight=\"-Infinity\" maxWidth=\"-Infinity\" minHeight=\"-Infinity\" minWidth=\"-Infinity\" prefHeight=\"1000.0\" prefWidth=\"1000.0\" xmlns=\"http://javafx.com/javafx/23.0.1\" xmlns:fx=\"http://javafx.com/fxml/1\" fx:controller=\"com.example.GUI.ProgramStage\">\r\n   <children>\r\n      <HBox fx:id=\"swapHBox\" prefHeight=\"116.0\" prefWidth=\"1000.0\" style=\"-fx-background-color: #d9d9d9;\" AnchorPane.bottomAnchor=\"884.0\" AnchorPane.leftAnchor=\"0.0\" AnchorPane.rightAnchor=\"0.0\" AnchorPane.topAnchor=\"0.0\">\r\n         <children>\r\n            <ImageView fx:id=\"homeView\" fitHeight=\"60.0\" fitWidth=\"61.0\" onMousePressed=\"#onHomeView\">\r\n               <image>\r\n                  <Image url=\"@../Photos/Home_icon_orange.png\" />\r\n               </image>\r\n            </ImageView>\r\n            <Button fx:id=\"reportsButton\" mnemonicParsing=\"false\" onAction=\"#onReporting\" text=\"reports\">\r\n               <font>\r\n                  <Font name=\"System Bold\" size=\"16.0\" />\r\n               </font>\r\n               <HBox.margin>\r\n                  <Insets right=\"60.0\" top=\"40.0\" />\r\n               </HBox.margin>\r\n            </Button>\r\n            <Button fx:id=\"adoptButton\" mnemonicParsing=\"false\" onAction=\"#onAdopt\" stylesheets=\"@../com/example/pet_shelter/LoginButton.css\" text=\"Adopt\" HBox.hgrow=\"ALWAYS\">\r\n               <HBox.margin>\r\n                  <Insets right=\"60.0\" top=\"40.0\" />\r\n               </HBox.margin>\r\n               <font>\r\n                  <Font name=\"System Bold\" size=\"16.0\" />\r\n               </font>\r\n            </Button>\r\n            <Button fx:id=\"requestButton\" layoutX=\"210.0\" layoutY=\"50.0\" mnemonicParsing=\"false\" onAction=\"#onRequest\" stylesheets=\"@../com/example/pet_shelter/LoginButton.css\" text=\"Requests\">\r\n               <font>\r\n                  <Font name=\"System Bold\" size=\"16.0\" />\r\n               </font>\r\n               <HBox.margin>\r\n                  <Insets right=\"60.0\" top=\"40.0\" />\r\n               </HBox.margin>\r\n            </Button>\r\n            <Button layoutX=\"303.0\" layoutY=\"50.0\" mnemonicParsing=\"false\" onAction=\"#onHistory\" stylesheets=\"@../com/example/pet_shelter/LoginButton.css\" text=\"History\">\r\n               <font>\r\n                  <Font name=\"System Bold\" size=\"16.0\" />\r\n               </font>\r\n               <HBox.margin>\r\n                  <Insets right=\"60.0\" top=\"40.0\" />\r\n               </HBox.margin>\r\n            </Button>\r\n            <Button fx:id=\"profileButton\" layoutX=\"377.0\" layoutY=\"10.0\" mnemonicParsing=\"false\" onAction=\"#onProfile\" stylesheets=\"@../com/example/pet_shelter/LoginButton.css\" text=\"Profile\">\r\n               <font>\r\n                  <Font name=\"System Bold\" size=\"16.0\" />\r\n               </font>\r\n               <HBox.margin>\r\n                  <Insets right=\"60.0\" top=\"40.0\" />\r\n               </HBox.margin>\r\n            </Button>\r\n            <Button fx:id=\"adminButton\" layoutX=\"1395.0\" layoutY=\"50.0\" mnemonicParsing=\"false\" onAction=\"#onAdminButton\" stylesheets=\"@../com/example/pet_shelter/LoginButton.css\" text=\"Admin\">\r\n               <font>\r\n                  <Font name=\"System Bold\" size=\"16.0\" />\r\n               </font>\r\n               <HBox.margin>\r\n                  <Insets right=\"60.0\" top=\"40.0\" />\r\n               </HBox.margin>\r\n            </Button>\r\n\r\n         </children>\r\n      </HBox>\r\n      <AnchorPane fx:id=\"leftAnchorPane\" layoutX=\"566.0\" layoutY=\"116.0\" maxHeight=\"1080.0\" maxWidth=\"1920.0\" prefHeight=\"883.0\" prefWidth=\"434.0\" style=\"-fx-background-color: #FEDCAE;\" AnchorPane.bottomAnchor=\"0.6666666666666288\" AnchorPane.leftAnchor=\"566.0\" AnchorPane.rightAnchor=\"0.0\" AnchorPane.topAnchor=\"116.0\">\r\n         <children>\r\n            <VBox layoutX=\"123.0\" layoutY=\"315.0\" prefHeight=\"276.0\" prefWidth=\"247.0\">\r\n               <children>\r\n                  <Label fx:id=\"nameLabel\" alignment=\"CENTER\" contentDisplay=\"CENTER\" style=\"-fx-border-color: black; -fx-border-width: 1;\" text=\"Name: \">\r\n                     <font>\r\n                        <Font size=\"16.0\" />\r\n                     </font>\r\n                     <padding>\r\n                        <Insets bottom=\"20.0\" />\r\n                     </padding>\r\n                     <opaqueInsets>\r\n                        <Insets />\r\n                     </opaqueInsets>\r\n                  </Label>\r\n                  <Label fx:id=\"ageLabel\" text=\"Age: \">\r\n                     <font>\r\n                        <Font size=\"16.0\" />\r\n                     </font>\r\n                     <padding>\r\n                        <Insets bottom=\"20.0\" />\r\n                     </padding>\r\n                  </Label>\r\n                  <Label fx:id=\"idLabel\" text=\"ID:\">\r\n                     <font>\r\n                        <Font size=\"16.0\" />\r\n                     </font>\r\n                     <padding>\r\n                        <Insets bottom=\"20.0\" />\r\n                     </padding>\r\n                  </Label>\r\n                  <Label fx:id=\"speciesLabel\" text=\"Species: \">\r\n                     <font>\r\n                        <Font size=\"16.0\" />\r\n                     </font>\r\n                     <padding>\r\n                        <Insets bottom=\"20.0\" />\r\n                     </padding>\r\n                  </Label>\r\n                  <Label fx:id=\"breedLabel\" text=\"Breed\">\r\n                     <font>\r\n                        <Font size=\"16.0\" />\r\n                     </font>\r\n                     <padding>\r\n                        <Insets bottom=\"20.0\" />\r\n                     </padding>\r\n                  </Label>\r\n                  <Label fx:id=\"healthStatusLabel\" text=\"Health Status: \">\r\n                     <font>\r\n                        <Font size=\"16.0\" />\r\n                     </font>\r\n                     <padding>\r\n                        <Insets bottom=\"20.0\" />\r\n                     </padding>\r\n                  </Label>\r\n               </children>\r\n               <padding>\r\n                  <Insets bottom=\"15.0\" top=\"10.0\" />\r\n               </padding>\r\n            </VBox>\r\n            <ImageView fx:id=\"petImage\" fitHeight=\"315.0\" fitWidth=\"318.0\" layoutX=\"88.0\" pickOnBounds=\"true\" preserveRatio=\"true\" />\r\n            <Button fx:id=\"adoptPetButton\" layoutX=\"166.0\" layoutY=\"615.0\" mnemonicParsing=\"false\" onAction=\"#onAdoptPet\" prefHeight=\"93.0\" prefWidth=\"161.0\" style=\"-fx-background-color: white;\" text=\"Adopt\">\r\n               <font>\r\n                  <Font name=\"System Bold\" size=\"28.0\" />\r\n               </font>\r\n            </Button>\r\n         </children>\r\n      </AnchorPane>\r\n      <VBox fx:id=\"adoptVBox\" layoutY=\"191.0\" maxHeight=\"-Infinity\" maxWidth=\"-Infinity\" minHeight=\"-Infinity\" minWidth=\"-Infinity\" prefHeight=\"808.0\" prefWidth=\"562.0\" AnchorPane.bottomAnchor=\"0.6666666666666288\" AnchorPane.leftAnchor=\"0.0\" AnchorPane.rightAnchor=\"438.0\" AnchorPane.topAnchor=\"191.0\">\r\n         <children>\r\n            <ScrollPane fitToHeight=\"true\" fitToWidth=\"true\" maxHeight=\"-Infinity\" maxWidth=\"-Infinity\" minHeight=\"-Infinity\" minWidth=\"-Infinity\" prefHeight=\"807.0\" prefWidth=\"564.0\">\r\n               <content>\r\n                  <GridPane fx:id=\"gridPane\" maxHeight=\"-Infinity\" maxWidth=\"-Infinity\" minHeight=\"10.0\" minWidth=\"10.0\" prefHeight=\"130.0\" prefWidth=\"125.0\">\r\n                     <rowConstraints>\r\n                        <RowConstraints minHeight=\"10.0\" prefHeight=\"30.0\" />\r\n                     </rowConstraints>\r\n                  </GridPane>\r\n               </content>\r\n            </ScrollPane>\r\n         </children>\r\n      </VBox>\r\n      <Button fx:id=\"shelterButton\" layoutY=\"117.0\" mnemonicParsing=\"false\" onAction=\"#onShelter\" text=\"Shelters\" />\r\n   </children>\r\n</AnchorPane>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Pet_Shelter/src/main/resources/FXML/program-view.fxml b/Pet_Shelter/src/main/resources/FXML/program-view.fxml
+--- a/Pet_Shelter/src/main/resources/FXML/program-view.fxml	(revision bd3f697fee33d9e7049c8156b99e7040851b5370)
++++ b/Pet_Shelter/src/main/resources/FXML/program-view.fxml	(date 1734707579056)
+@@ -1,9 +1,11 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ 
+ <?import javafx.geometry.Insets?>
++<?import javafx.scene.control.Accordion?>
+ <?import javafx.scene.control.Button?>
+ <?import javafx.scene.control.Label?>
+ <?import javafx.scene.control.ScrollPane?>
++<?import javafx.scene.control.TitledPane?>
+ <?import javafx.scene.image.Image?>
+ <?import javafx.scene.image.ImageView?>
+ <?import javafx.scene.layout.AnchorPane?>
+@@ -73,7 +75,7 @@
+ 
+          </children>
+       </HBox>
+-      <AnchorPane fx:id="leftAnchorPane" layoutX="566.0" layoutY="116.0" maxHeight="1080.0" maxWidth="1920.0" prefHeight="883.0" prefWidth="434.0" style="-fx-background-color: #FEDCAE;" AnchorPane.bottomAnchor="0.6666666666666288" AnchorPane.leftAnchor="566.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="116.0">
++      <AnchorPane fx:id="leftAnchorPane" layoutX="566.0" layoutY="116.0" maxHeight="1080.0" maxWidth="1920.0" prefHeight="775.0" prefWidth="305.0" style="-fx-background-color: #FEDCAE;" AnchorPane.bottomAnchor="109.0" AnchorPane.leftAnchor="566.0" AnchorPane.rightAnchor="129.0" AnchorPane.topAnchor="116.0">
+          <children>
+             <VBox layoutX="123.0" layoutY="315.0" prefHeight="276.0" prefWidth="247.0">
+                <children>
+@@ -134,7 +136,7 @@
+                </padding>
+             </VBox>
+             <ImageView fx:id="petImage" fitHeight="315.0" fitWidth="318.0" layoutX="88.0" pickOnBounds="true" preserveRatio="true" />
+-            <Button fx:id="adoptPetButton" layoutX="166.0" layoutY="615.0" mnemonicParsing="false" onAction="#onAdoptPet" prefHeight="93.0" prefWidth="161.0" style="-fx-background-color: white;" text="Adopt">
++            <Button fx:id="adoptPetButton" layoutX="58.0" layoutY="158.0" mnemonicParsing="false" onAction="#onAdoptPet" prefHeight="93.0" prefWidth="161.0" style="-fx-background-color: white;" text="Adopt">
+                <font>
+                   <Font name="System Bold" size="28.0" />
+                </font>
+@@ -155,5 +157,11 @@
+          </children>
+       </VBox>
+       <Button fx:id="shelterButton" layoutY="117.0" mnemonicParsing="false" onAction="#onShelter" text="Shelters" />
++      <Accordion>
++        <panes>
++          <TitledPane animated="false" text="untitled 1" />
++          <TitledPane animated="false" text="untitled 2" />
++        </panes>
++      </Accordion>
+    </children>
+ </AnchorPane>
+Index: Pet_Shelter/src/main/java/com/example/pet_shelter/AdoptionRequest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.pet_shelter;\r\nimport java.time.LocalDate;\r\nimport java.util.*;\r\nimport org.json.JSONArray;\r\nimport org.json.JSONObject;\r\n\r\nimport com.example.Exceptions.AlreadyFoundException;\r\nimport org.json.JSONArray;\r\nimport org.json.JSONObject;\r\nimport java.nio.file.Files;\r\nimport java.nio.file.Path;\r\nimport java.io.FileWriter;\r\nimport java.io.IOException;\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\nimport static com.example.pet_shelter.Main.*;\r\n\r\n\r\npublic class AdoptionRequest {\r\n    Integer adoptionId;\r\n    protected static int Next_ID=0;\r\n    protected Pet adoptedPet;\r\n    protected Adopter adopter;\r\n    protected LocalDate adoption_Date;\r\n    private AdoptionStatus adoption_status = AdoptionStatus.PENDED;\r\n\r\n\r\n    public AdoptionRequest(int id,Adopter u, Pet p,LocalDate d,AdoptionStatus ad) {\r\n//\r\n        this.adoptionId = id;\r\n        this.adopter = u;\r\n        this.adoptedPet = p;\r\n        this.adoption_Date =(d!=null)?d: LocalDate.now();\r\n        this.adoption_status =(d!=null)?ad: AdoptionStatus.PENDED;\r\n    }\r\n\r\n    public void setStatus(AdoptionStatus s) {\r\n        adoption_status = s;\r\n    }\r\n\r\n    public AdoptionStatus getStatus() {\r\n        return adoption_status;\r\n    }\r\n\r\n    public enum AdoptionStatus {\r\n        APPROVED, REJECTED, PENDED\r\n    }\r\n\r\n    //adoption request method\r\n    public static void adopt( Pet p) {\r\n       Next_ID= requests.getLast().adoptionId++;\r\n        AdoptionRequest newRequest = new AdoptionRequest(Next_ID,(Adopter)User.loggedInUser,p,null,null);\r\n        requests.add(newRequest);\r\n        System.out.println(\"your request have been submitted successfully \");// pop message in the GUI\r\n    }\r\n\r\n    //--------------------Admin methods--------------------\r\n    public static void displayPendedRequests() {\r\n        for(AdoptionRequest req:requests){\r\n            if(req.getStatus()==AdoptionStatus.PENDED){\r\n            System.out.println(\"Adoption ID: \" + req.adoptionId );\r\n            System.out.println(  \", Adopter: \" + req.adopter.getUserName());\r\n            System.out.println(  \", Pet: \" + req.adoptedPet.getName());\r\n            System.out.println(\", Status: \" + req.getStatus());}\r\n        }\r\n    }\r\n\r\n    public static void displayAllRequests() {\r\n        for(AdoptionRequest req:requests){\r\n            System.out.println(\"Adoption ID: \" + req.adoptionId );\r\n            System.out.println(  \", Adopter: \" + req.adopter.getUserName());\r\n            System.out.println(  \", Pet: \" + req.adoptedPet.getName());\r\n            System.out.println(\", Status: \" + req.getStatus());\r\n        }\r\n    }\r\n\r\n    // Method to reject the request\r\n    public void rejectRequest(AdoptionRequest request) {\r\n        request.setStatus(AdoptionStatus.REJECTED);\r\n        System.out.println(\"Adoption Request Rejected for Pet: \" + request.adoptedPet.getPetId());\r\n    }\r\n\r\n    // Method to approve the request\r\n    public void approveRequest(AdoptionRequest request) {\r\n        request.setStatus(AdoptionStatus.APPROVED);\r\n        System.out.println(\"Adoption Request Approved for Pet: \" + request.adoptedPet.getPetId());\r\n        request.adopter.requestAdoption(request.adoptedPet); //for adopter class\r\n        request.adopter.requestAdoption(request.adoptedPet);\r\n        //removing the accepted pet from the pets list\r\n        allPets.remove(request.adoptedPet);\r\n    }\r\n//------------------------------------------------------------\r\n\r\n    public static List<AdoptionRequest> readData() {\r\n       List<AdoptionRequest> adoptionRequests = new ArrayList<>();\r\n\r\n        try {\r\n            // Step 1: Specify file path and read data\r\n            Path path = Path.of(\"Requests.json\");\r\n            byte[] bytes = Files.readAllBytes(path);\r\n            String jsonString = new String(bytes);\r\n\r\n            // Step 2: Parse JSON array\r\n            JSONArray jsonArray = new JSONArray(jsonString);\r\n\r\n            // Step 3: Iterate through JSON objects\r\n            for (int i = 0; i < jsonArray.length(); i++) {\r\n                JSONObject obj = jsonArray.getJSONObject(i);\r\n\r\n                // Step 4: Extract adopter and pet details\r\n                JSONObject adopterObj = obj.getJSONObject(\"adopter\");\r\n                Adopter adopter = new Adopter(\r\n                        adopterObj.getInt(\"id\"),\r\n                        adopterObj.getString(\"user_name\"),\r\n                        adopterObj.getString(\"user_password\"),\r\n                        adopterObj.getString(\"user_role\"),\r\n                        adopterObj.getString(\"user_email\"),\r\n                        adopterObj.getInt(\"age\"),\r\n                        adopterObj.getString(\"gender\"),\r\n                        adopterObj.getInt(\"phoneNumber\"),\r\n                        adopterObj.getString(\"address\")\r\n                );\r\n\r\n                JSONObject petObj = obj.getJSONObject(\"adoptedPet\");\r\n                Pet adoptedPet = new Pet(\r\n                        petObj.getInt(\"petId\"),\r\n                        petObj.getString(\"name\"),\r\n                        petObj.getString(\"species\"),\r\n                        petObj.getString(\"breed\"),\r\n                        petObj.getInt(\"age\"),\r\n                        petObj.getString(\"healthStatus\")\r\n                );\r\n\r\n\r\n                AdoptionRequest request = new AdoptionRequest(\r\n                        obj.getInt(\"adoptionId\"),\r\n                        adopter,\r\n                        adoptedPet,\r\n                        LocalDate.parse(obj.getString(\"adoptionDate\")),\r\n                        AdoptionStatus.valueOf(obj.getString(\"adoptionStatus\"))\r\n                );\r\n\r\n\r\n                adoptionRequests.add(request);\r\n            }\r\n        } catch (IOException e) {\r\n            System.out.println(\"No data found\");\r\n        }\r\n\r\n\r\n        return adoptionRequests;\r\n    }\r\n\r\n    public static void writeData(List<AdoptionRequest> adoptionRequests) {\r\n        // Create a JSONArray to hold the data\r\n        JSONArray jsonArray = new JSONArray();\r\n\r\n        // Iterate over the list of AdoptionRequest objects and add them to the JSONArray\r\n        for (AdoptionRequest request : adoptionRequests) {\r\n            JSONObject obj = new JSONObject();\r\n\r\n            // Add the fields of the AdoptionRequest object to the JSON object\r\n            obj.put(\"adoptionId\", request.adoptionId);\r\n            obj.put(\"adopter\", new JSONObject()\r\n                    .put(\"id\", request.adopter.getId())\r\n                    .put(\"user_name\", request.adopter.getUserName())\r\n                    .put(\"user_password\",request.adopter.getUserPassword())\r\n                    .put(\"age\",request.adopter.getAge())\r\n                    .put(\"gender\",request.adopter.getGender())\r\n                    .put(\"phoneNumber\",request.adopter.getContactInfo().phoneNumber)\r\n                    .put(\"address\",request.adopter.getContactInfo().address)\r\n                    .put(\"user_role\", request.adopter.getUserRole())\r\n                    .put(\"user_email\", request.adopter.getUserEmail())\r\n            );\r\n\r\n            obj.put(\"adoptedPet\", new JSONObject()\r\n                    .put(\"petId\", request.adoptedPet.getPetId())\r\n                    .put(\"name\", request.adoptedPet.getName())\r\n                    .put(\"species\", request.adoptedPet.getSpecies())\r\n                    .put(\"breed\", request.adoptedPet.getBreed())\r\n                    .put(\"age\", request.adoptedPet.getAge())\r\n                    .put(\"healthStatus\", request.adoptedPet.getHealthStatus())\r\n            );\r\n\r\n            obj.put(\"adoptionDate\", request.adoption_Date.toString());\r\n            obj.put(\"adoptionStatus\", request.adoption_status.toString());\r\n\r\n            jsonArray.put(obj);\r\n        }\r\n\r\n        try (FileWriter file = new FileWriter(\"Requests.json\")) {\r\n            file.write(jsonArray.toString(4));\r\n            System.out.println(\"Adoption requests have been written to the file.\");\r\n        } catch (IOException e) {\r\n            e.printStackTrace();\r\n            System.out.println(\"Error writing to the file.\");\r\n        }\r\n    }\r\n}\r\n\r\n\r\n/*\r\nfor the notification part we have 2 options or we can make both :\r\nin the 2 options we need to add a list as an attribute to the user class\r\n\r\n1. make a section for each user called notification and display there the notifications of the current user\r\n\r\n2. (preferred option) when the user is logged in if he has a notification so it appears as a pop message\r\n\r\n */
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Pet_Shelter/src/main/java/com/example/pet_shelter/AdoptionRequest.java b/Pet_Shelter/src/main/java/com/example/pet_shelter/AdoptionRequest.java
+--- a/Pet_Shelter/src/main/java/com/example/pet_shelter/AdoptionRequest.java	(revision bd3f697fee33d9e7049c8156b99e7040851b5370)
++++ b/Pet_Shelter/src/main/java/com/example/pet_shelter/AdoptionRequest.java	(date 1734701907350)
+@@ -1,6 +1,5 @@
+ package com.example.pet_shelter;
+ import java.time.LocalDate;
+-import java.util.*;
+ import org.json.JSONArray;
+ import org.json.JSONObject;
+ 
+@@ -25,8 +24,8 @@
+     private AdoptionStatus adoption_status = AdoptionStatus.PENDED;
+ 
+ 
++
+     public AdoptionRequest(int id,Adopter u, Pet p,LocalDate d,AdoptionStatus ad) {
+-//
+         this.adoptionId = id;
+         this.adopter = u;
+         this.adoptedPet = p;
+@@ -48,7 +47,18 @@
+ 
+     //adoption request method
+     public static void adopt( Pet p) {
+-       Next_ID= requests.getLast().adoptionId++;
++        if (p == null) {
++            System.out.println("Error: The pet cannot be null.");
++            return;
++        }
++
++        if(requests.equals(null) || requests.isEmpty())
++        {
++            Next_ID = 1;
++        }
++        else {
++            Next_ID = requests.getLast().adoptionId++;
++        }
+         AdoptionRequest newRequest = new AdoptionRequest(Next_ID,(Adopter)User.loggedInUser,p,null,null);
+         requests.add(newRequest);
+         System.out.println("your request have been submitted successfully ");// pop message in the GUI
+@@ -58,10 +68,10 @@
+     public static void displayPendedRequests() {
+         for(AdoptionRequest req:requests){
+             if(req.getStatus()==AdoptionStatus.PENDED){
+-            System.out.println("Adoption ID: " + req.adoptionId );
+-            System.out.println(  ", Adopter: " + req.adopter.getUserName());
+-            System.out.println(  ", Pet: " + req.adoptedPet.getName());
+-            System.out.println(", Status: " + req.getStatus());}
++                System.out.println("Adoption ID: " + req.adoptionId );
++                System.out.println(  ", Adopter: " + req.adopter.getUserName());
++                System.out.println(  ", Pet: " + req.adoptedPet.getName());
++                System.out.println(", Status: " + req.getStatus());}
+         }
+     }
+ 
+@@ -85,14 +95,14 @@
+         request.setStatus(AdoptionStatus.APPROVED);
+         System.out.println("Adoption Request Approved for Pet: " + request.adoptedPet.getPetId());
+         request.adopter.requestAdoption(request.adoptedPet); //for adopter class
+-        request.adopter.requestAdoption(request.adoptedPet);
+         //removing the accepted pet from the pets list
+         allPets.remove(request.adoptedPet);
++
+     }
+ //------------------------------------------------------------
+ 
+     public static List<AdoptionRequest> readData() {
+-       List<AdoptionRequest> adoptionRequests = new ArrayList<>();
++        List<AdoptionRequest> adoptionRequests = new ArrayList<>();
+ 
+         try {
+             // Step 1: Specify file path and read data
+@@ -146,8 +156,6 @@
+         } catch (IOException e) {
+             System.out.println("No data found");
+         }
+-
+-
+         return adoptionRequests;
+     }
+ 
+@@ -174,7 +182,7 @@
+             );
+ 
+             obj.put("adoptedPet", new JSONObject()
+-                    .put("petId", request.adoptedPet.getPetId())
++                    .put("petId", request.adoptedPet.petID)
+                     .put("name", request.adoptedPet.getName())
+                     .put("species", request.adoptedPet.getSpecies())
+                     .put("breed", request.adoptedPet.getBreed())
+Index: Pet_Shelter/src/main/java/com/example/pet_shelter/Adopter.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.pet_shelter;\r\n\r\nimport java.util.ArrayList;\r\n\r\npublic class Adopter extends User {\r\n    public int numOfadoptedPets;\r\n    public ArrayList<Pet>adoptionHistory;\r\n    public ArrayList<Pet>currentPets;\r\n\r\n    public Adopter(int id, String user_name, String user_password, String user_role, String user_email, int age, String gender, int phoneNumber, String address) {\r\n        super(id, user_name, user_password, user_role, user_email, age, gender, new ContactInformation(phoneNumber, address));\r\n        this.numOfadoptedPets = 0;\r\n        this.adoptionHistory = new ArrayList<>();\r\n        this.currentPets = new ArrayList<>();\r\n    }\r\n\r\n    public Adopter(User user)\r\n    {\r\n        super(user.getId(), user.getUserName(), user.getUserPassword(), user.getUserRole(), user.getUserEmail(), user.getAge(), user.getGender(), user.getContactInfo());\r\n    }\r\n\r\n    public ArrayList<Pet> getAdoptionHistory() {\r\n        return adoptionHistory;\r\n    }\r\n\r\n    public ContactInformation getContactInfo() {\r\n        return contactInfo;\r\n    }\r\n\r\n    public  void requestAdoption(Pet pet){\r\n            adoptionHistory.add(pet);\r\n            numOfadoptedPets++;\r\n            currentPets.add(pet);\r\n    }\r\n\r\n    public void displayAdoptedPets() {\r\n        if (adoptionHistory.isEmpty()){\r\n            System.out.println(\"No pets adopted yet\");\r\n            return;}\r\n        else {\r\n            for (int i = 0; i < adoptionHistory.size(); i++) {\r\n                System.out.println(\"Pet number \" + (i + 1) + \"#\");\r\n                System.out.println(\"Pet id: \" + adoptionHistory.get(i).getPetId());\r\n                System.out.println(\"Pet name: \" + adoptionHistory.get(i).getName());\r\n                System.out.println(\"Pet age: \" + adoptionHistory.get(i).getAge());\r\n                System.out.println(\"Pet Health Status: \" + adoptionHistory.get(i).getHealthStatus());\r\n                System.out.println(\"------------\");\r\n            }\r\n            System.out.println();\r\n        }\r\n    }\r\n\r\n}\r\n\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Pet_Shelter/src/main/java/com/example/pet_shelter/Adopter.java b/Pet_Shelter/src/main/java/com/example/pet_shelter/Adopter.java
+--- a/Pet_Shelter/src/main/java/com/example/pet_shelter/Adopter.java	(revision bd3f697fee33d9e7049c8156b99e7040851b5370)
++++ b/Pet_Shelter/src/main/java/com/example/pet_shelter/Adopter.java	(date 1734702023092)
+@@ -4,7 +4,7 @@
+ 
+ public class Adopter extends User {
+     public int numOfadoptedPets;
+-    public ArrayList<Pet>adoptionHistory;
++    public ArrayList<AdoptionRequest>adoptionHistory;
+     public ArrayList<Pet>currentPets;
+ 
+     public Adopter(int id, String user_name, String user_password, String user_role, String user_email, int age, String gender, int phoneNumber, String address) {
+@@ -19,7 +19,7 @@
+         super(user.getId(), user.getUserName(), user.getUserPassword(), user.getUserRole(), user.getUserEmail(), user.getAge(), user.getGender(), user.getContactInfo());
+     }
+ 
+-    public ArrayList<Pet> getAdoptionHistory() {
++    public ArrayList<AdoptionRequest> getAdoptionHistory() {
+         return adoptionHistory;
+     }
+ 
+@@ -28,28 +28,27 @@
+     }
+ 
+     public  void requestAdoption(Pet pet){
+-            adoptionHistory.add(pet);
+-            numOfadoptedPets++;
+-            currentPets.add(pet);
++//            adoptionHistory.add(pet);
++//            numOfadoptedPets++;
++//            currentPets.add(pet);
+     }
+ 
+     public void displayAdoptedPets() {
+         if (adoptionHistory.isEmpty()){
+             System.out.println("No pets adopted yet");
+             return;}
+-        else {
+-            for (int i = 0; i < adoptionHistory.size(); i++) {
+-                System.out.println("Pet number " + (i + 1) + "#");
+-                System.out.println("Pet id: " + adoptionHistory.get(i).getPetId());
+-                System.out.println("Pet name: " + adoptionHistory.get(i).getName());
+-                System.out.println("Pet age: " + adoptionHistory.get(i).getAge());
+-                System.out.println("Pet Health Status: " + adoptionHistory.get(i).getHealthStatus());
+-                System.out.println("------------");
+-            }
++//        else {
++//            for (int i = 0; i < adoptionHistory.size(); i++) {
++//                System.out.println("Pet number " + (i + 1) + "#");
++//                System.out.println("Pet id: " + adoptionHistory.get(i).getPetId());
++//                System.out.println("Pet name: " + adoptionHistory.get(i).getName());
++//                System.out.println("Pet age: " + adoptionHistory.get(i).getAge());
++//                System.out.println("Pet Health Status: " + adoptionHistory.get(i).getHealthStatus());
++//                System.out.println("------------");
++//            }
+             System.out.println();
+         }
+     }
+ 
+-}
+ 
+ 
+Index: Pet_Shelter/users.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>[\r\n    {\r\n        \"user_role\": \"admin\",\r\n        \"user_password\": \"1234\",\r\n        \"user_email\": \"Taha@gmail.com\",\r\n        \"address\": \"lolxd\",\r\n        \"gender\": \"male\",\r\n        \"user_name\": \"Taha\",\r\n        \"phoneNum\": 1110630831,\r\n        \"id\": 1,\r\n        \"age\": 19\r\n    },\r\n    {\r\n        \"user_role\": \"admin\",\r\n        \"user_password\": \"1234\",\r\n        \"user_email\": \"Asmaa@gmail.com\",\r\n        \"address\": \"Idk\",\r\n        \"gender\": \"female\",\r\n        \"user_name\": \"Asmaa\",\r\n        \"phoneNum\": 1112131455,\r\n        \"id\": 2,\r\n        \"age\": 18\r\n    },\r\n    {\r\n        \"user_role\": \"User\",\r\n        \"user_password\": \"1234\",\r\n        \"user_email\": \"lilac@gmail.com\",\r\n        \"address\": \"home\",\r\n        \"gender\": \"female\",\r\n        \"user_name\": \"lilac\",\r\n        \"phoneNum\": 123,\r\n        \"id\": 3,\r\n        \"age\": 18\r\n    },\r\n    {\r\n        \"user_role\": \"User\",\r\n        \"user_password\": \"1234\",\r\n        \"user_email\": \"7amada@gmail.com\",\r\n        \"address\": \"haram\",\r\n        \"gender\": \"male\",\r\n        \"user_name\": \"7amada\",\r\n        \"phoneNum\": 120,\r\n        \"id\": 232,\r\n        \"age\": 22\r\n    },\r\n    {\r\n        \"user_role\": \"User\",\r\n        \"user_password\": \"1234\",\r\n        \"user_email\": \"molan@gmail.com\",\r\n        \"address\": \"madinty\",\r\n        \"gender\": \"female\",\r\n        \"user_name\": \"molan\",\r\n        \"phoneNum\": 18373776,\r\n        \"id\": 99,\r\n        \"age\": 21\r\n    },\r\n    {\r\n        \"user_role\": \"User\",\r\n        \"user_password\": \"1234\",\r\n        \"user_email\": \"smsm@gmail.com\",\r\n        \"address\": \"shbeen\",\r\n        \"gender\": \"female\",\r\n        \"user_name\": \"smsm\",\r\n        \"phoneNum\": 12363736,\r\n        \"id\": 124,\r\n        \"age\": 30\r\n    }\r\n]
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Pet_Shelter/users.json b/Pet_Shelter/users.json
+--- a/Pet_Shelter/users.json	(revision bd3f697fee33d9e7049c8156b99e7040851b5370)
++++ b/Pet_Shelter/users.json	(date 1734709158305)
+@@ -55,6 +55,42 @@
+         "age": 21
+     },
+     {
++        "id": 19,
++        "user_name": "JohnDoe",
++        "user_password": "password123",
++        "user_role": "user",
++        "user_email": "johndoe@example.com",
++        "phoneNum": 1234567890,
++        "address": "123 Main St",
++        "gender": "male",
++        "age": 30,
++        "adoptionHistory": [
++            {
++                "adoptionId": 1,
++                "adoptedPet": {
++                    "petId": 101,
++                    "name": "Buddy",
++                    "species": "Dog",
++                    "breed": "Golden Retriever",
++                    "age": 3,
++                    "color": "Golden"
++                },
++                "adoption_Date": "2023-12-01",
++                "adoption_status": "APPROVED"
++            }
++        ],
++        "currentPets": [
++            {
++                "petId": 102,
++                "name": "Whiskers",
++                "species": "Cat",
++                "breed": "Siamese",
++                "age": 2,
++                "color": "Cream"
++            }
++        ]
++    },
++    {
+         "user_role": "User",
+         "user_password": "1234",
+         "user_email": "smsm@gmail.com",
+Index: Pet_Shelter/src/main/java/com/example/GUI/ModifyUserStage.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.GUI;\r\n\r\n\r\nimport com.example.Exceptions.AlreadyFoundException;\r\nimport com.example.pet_shelter.Adopter;\r\nimport com.example.pet_shelter.Main;\r\nimport com.example.pet_shelter.User;\r\nimport javafx.event.ActionEvent;\r\nimport javafx.fxml.FXML;\r\nimport javafx.fxml.FXMLLoader;\r\nimport javafx.fxml.Initializable;\r\nimport javafx.scene.control.*;\r\nimport javafx.scene.layout.AnchorPane;\r\nimport javafx.scene.text.Text;\r\nimport javafx.stage.Stage;\r\nimport javafx.util.Callback;\r\n\r\nimport java.io.IOException;\r\nimport java.net.URL;\r\nimport java.util.Optional;\r\nimport java.util.ResourceBundle;\r\nimport java.util.function.Predicate;\r\n\r\npublic class ModifyUserStage implements Initializable\r\n{\r\n\r\n    //A counter for the ShowUser method\r\n    private static int Counter = 0;\r\n\r\n    @FXML\r\n    private TextField addressText;\r\n\r\n    @FXML\r\n    private TextField emailText;\r\n\r\n    @FXML\r\n    private Text idTextField;\r\n\r\n    @FXML\r\n    private TextField passwordText;\r\n\r\n    @FXML\r\n    private TextField phoneNumText;\r\n\r\n    @FXML\r\n    private TextField userNameText;\r\n\r\n    @FXML\r\n    private ComboBox<String> userRoleBox;\r\n    @FXML\r\n    private TextField ageText;\r\n    @FXML\r\n    private TextField genderText;\r\n\r\n    @FXML\r\n    private ListView<User> userListView = new ListView<User>();\r\n    @FXML\r\n    RadioButton maleRadio;\r\n    @FXML\r\n    RadioButton femaleRadio;\r\n\r\n\r\n\r\n    ToggleGroup group = new ToggleGroup();\r\n\r\n\r\n\r\n\r\n    @FXML\r\n    void onAddUser(ActionEvent event)\r\n    {\r\n        try {\r\n            User newUser = new Adopter(Integer.parseInt(idTextField.getText()), userNameText.getText(), passwordText.getText(), userRoleBox.getValue(), emailText.getText(),  Integer.parseInt(ageText.getText()), getGender(),Integer.parseInt(phoneNumText.getText()), addressText.getText());\r\n            User.register(newUser);\r\n            updateCellFactory();\r\n            TaskSuccessful();\r\n        }\r\n        catch (NumberFormatException | NullPointerException e)\r\n        {\r\n            throw new AlreadyFoundException(\"Missing data\");\r\n        }\r\n    }\r\n\r\n    @FXML\r\n    void onDeleteUser(ActionEvent event)\r\n    {\r\n        User removeUser = findUser();\r\n        if(findUser() == null)\r\n        {\r\n            return;\r\n        }\r\n        Main.currentUsers.remove(removeUser);\r\n        updateCellFactory();\r\n        TaskSuccessful();\r\n    }\r\n\r\n    @FXML\r\n    void onChangeUser()\r\n    {\r\n        User changedUser = null;\r\n        User FoundUser = findUser();\r\n\r\n        if(FoundUser == null)\r\n        {\r\n            return;\r\n        }\r\n\r\n\r\n        try {\r\n            changedUser = new Adopter(Integer.parseInt(idTextField.getText()), userNameText.getText(), passwordText.getText(), userRoleBox.getValue(), emailText.getText(),Integer.parseInt(ageText.getText()),getGender(),Integer.parseInt(phoneNumText.getText()), addressText.getText());\r\n        }\r\n        catch (AlreadyFoundException | NumberFormatException | NullPointerException e)\r\n        {\r\n            throw new AlreadyFoundException(\"Missing data\");\r\n        }\r\n        Main.currentUsers.remove(FoundUser);\r\n        Main.currentUsers.add(changedUser);\r\n        updateCellFactory();\r\n        TaskSuccessful();\r\n\r\n    }\r\n\r\n    //Throws a NullPointer Exception if the user is not found\r\n    public User findUser()\r\n    {\r\n        Optional<User> chosenUser = null;\r\n        try {\r\n            //Condition to search for the user, Checks for ID first, If it's not entered check for Email, returns false if both conditions fail\r\n            Predicate<User> findUser = new Predicate<User>() {\r\n                @Override\r\n                public boolean test(User user) {\r\n                    try {\r\n                        if (user.getId() == Integer.parseInt(idTextField.getText())) {\r\n                            return true;\r\n                        }\r\n                    }\r\n                    catch (NumberFormatException e) {\r\n                        if(user.getUserEmail().equals(emailText.getText())) {\r\n                            return true;\r\n                        }\r\n                    }\r\n                    return false;\r\n                }\r\n            };\r\n            //Stream to find the user following the Predicate\r\n            chosenUser = Main.currentUsers.stream()\r\n                    .filter(findUser)\r\n                    .findAny();\r\n            if(chosenUser.isEmpty()) {\r\n                throw new NullPointerException();\r\n            }\r\n        }\r\n        catch(NullPointerException e){\r\n            UserNotFound();\r\n        }\r\n        return chosenUser.orElse(null);\r\n    }\r\n    @Override\r\n    public void initialize(URL url, ResourceBundle resourceBundle)\r\n    {\r\n        userRoleBox.getItems().addAll(\"admin\", \"User\");\r\n        userRoleBox.setValue(null);\r\n\r\n        //Radio buttons\r\n\r\n        maleRadio.setToggleGroup(group);\r\n        femaleRadio.setToggleGroup(group);\r\n\r\n        userListView.getItems().addAll(Main.currentUsers);\r\n       updateCellFactory();\r\n    }\r\n    public void TaskSuccessful()\r\n    {\r\n        Alert sucecssAlert = new Alert(Alert.AlertType.CONFIRMATION, \"Task completed successfully\", ButtonType.OK);\r\n        sucecssAlert.setHeaderText(null);\r\n        sucecssAlert.setTitle(\"Success\");\r\n        Stage successStage  = (Stage) sucecssAlert.getDialogPane().getScene().getWindow();\r\n        successStage.toFront();\r\n        successStage.setAlwaysOnTop(true);\r\n        successStage.showAndWait();\r\n        idTextField.setText(null);\r\n        userNameText.setText(null);\r\n        passwordText.setText(null);\r\n        emailText.setText(null);\r\n        userRoleBox.setValue(\"Role\");\r\n        addressText.setText(null);\r\n        phoneNumText.setText(null);\r\n        group.selectToggle(null);\r\n        ageText.setText(null);\r\n    }\r\n\r\n\r\n    private void UserNotFound()\r\n    {\r\n        Alert wrongIDAlert = new Alert(Alert.AlertType.ERROR, \"User not found. Try again.\", ButtonType.OK, ButtonType.CANCEL);\r\n        Stage alertStage = (Stage) wrongIDAlert.getDialogPane().getScene().getWindow();\r\n        wrongIDAlert.setHeaderText(\"User Not Found.\");\r\n        alertStage.setAlwaysOnTop(true);\r\n        alertStage.showAndWait();\r\n        alertStage.toFront();\r\n    }\r\n\r\n    private void displayUser(User displayUser)\r\n    {\r\n        idTextField.setText(String.valueOf(displayUser.getId()));\r\n        userNameText.setText(displayUser.getUserName());\r\n        passwordText.setText(displayUser.getUserPassword());\r\n        emailText.setText(displayUser.getUserEmail());\r\n        userRoleBox.setValue(displayUser.getUserRole());\r\n        addressText.setText(displayUser.getContactInfo().getAddress());\r\n        phoneNumText.setText(String.valueOf(displayUser.getContactInfo().getPhoneNumber()));\r\n\r\n        if(displayUser.getGender().equalsIgnoreCase(\"male\")){\r\n            maleRadio.setSelected(true);\r\n        }\r\n        else if(displayUser.getGender().equalsIgnoreCase(\"female\")){\r\n            femaleRadio.setSelected(true);\r\n        }\r\n\r\n\r\n        ageText.setText(String.valueOf(displayUser.getAge()));\r\n    }\r\n    private void updateCellFactory(){\r\n\r\n        userListView.getItems().clear();\r\n        userListView.getItems().addAll(Main.currentUsers);\r\n\r\n        userListView.setCellFactory(new Callback<ListView<User>, ListCell<User>>() {\r\n            @Override\r\n            public ListCell<User> call(ListView<User> userListView) {\r\n                return new ListCell<User>(){\r\n                    protected void updateItem(User user, boolean empty) {\r\n                        super.updateItem(user, empty);\r\n\r\n                        if(!empty) {\r\n                            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(\"/FXML/users-list.fxml\"));\r\n                            AnchorPane anchorPane;\r\n                            try {\r\n                                anchorPane = fxmlLoader.load();\r\n                            } catch (IOException e) {\r\n                                throw new RuntimeException(e);\r\n                            }\r\n\r\n                            anchorPane.setPrefWidth(userListView.getWidth());\r\n                            anchorPane.setPrefHeight(USE_COMPUTED_SIZE);\r\n                            anchorPane.setOnMousePressed(MouseEvent->{\r\n                                displayUser(user);\r\n                            });\r\n\r\n                            UsersList usersList = (UsersList) fxmlLoader.getController();\r\n                            usersList.setUserData(user);\r\n                            setGraphic(anchorPane);\r\n                        }\r\n\r\n                    }\r\n                };\r\n            }\r\n        });\r\n    }\r\n    private String getGender()\r\n    {\r\n        if(maleRadio.isSelected()) {\r\n            return \"male\";\r\n        }\r\n        else if(femaleRadio.isSelected()) {\r\n            return \"female\";\r\n        }\r\n        return null;\r\n    }\r\n\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Pet_Shelter/src/main/java/com/example/GUI/ModifyUserStage.java b/Pet_Shelter/src/main/java/com/example/GUI/ModifyUserStage.java
+--- a/Pet_Shelter/src/main/java/com/example/GUI/ModifyUserStage.java	(revision bd3f697fee33d9e7049c8156b99e7040851b5370)
++++ b/Pet_Shelter/src/main/java/com/example/GUI/ModifyUserStage.java	(date 1734707385623)
+@@ -97,7 +97,7 @@
+     @FXML
+     void onChangeUser()
+     {
+-        User changedUser = null;
++        Adopter changedUser = null;
+         User FoundUser = findUser();
+ 
+         if(FoundUser == null)
+@@ -123,7 +123,7 @@
+     //Throws a NullPointer Exception if the user is not found
+     public User findUser()
+     {
+-        Optional<User> chosenUser = null;
++        Optional<Adopter> chosenUser = null;
+         try {
+             //Condition to search for the user, Checks for ID first, If it's not entered check for Email, returns false if both conditions fail
+             Predicate<User> findUser = new Predicate<User>() {
+Index: Pet_Shelter/target/classes/FXML/program-view.fxml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n\r\n<?import javafx.geometry.Insets?>\r\n<?import javafx.scene.control.Button?>\r\n<?import javafx.scene.control.Label?>\r\n<?import javafx.scene.control.ScrollPane?>\r\n<?import javafx.scene.image.Image?>\r\n<?import javafx.scene.image.ImageView?>\r\n<?import javafx.scene.layout.AnchorPane?>\r\n<?import javafx.scene.layout.GridPane?>\r\n<?import javafx.scene.layout.HBox?>\r\n<?import javafx.scene.layout.RowConstraints?>\r\n<?import javafx.scene.layout.VBox?>\r\n<?import javafx.scene.text.Font?>\r\n\r\n<AnchorPane fx:id=\"mainAnchorPane\" maxHeight=\"-Infinity\" maxWidth=\"-Infinity\" minHeight=\"-Infinity\" minWidth=\"-Infinity\" prefHeight=\"1000.0\" prefWidth=\"1000.0\" xmlns=\"http://javafx.com/javafx/23.0.1\" xmlns:fx=\"http://javafx.com/fxml/1\" fx:controller=\"com.example.GUI.ProgramStage\">\r\n   <children>\r\n      <HBox fx:id=\"swapHBox\" prefHeight=\"116.0\" prefWidth=\"1000.0\" style=\"-fx-background-color: #d9d9d9;\" AnchorPane.bottomAnchor=\"884.0\" AnchorPane.leftAnchor=\"0.0\" AnchorPane.rightAnchor=\"0.0\" AnchorPane.topAnchor=\"0.0\">\r\n         <children>\r\n            <ImageView fx:id=\"homeView\" fitHeight=\"60.0\" fitWidth=\"61.0\" onMousePressed=\"#onHomeView\">\r\n               <image>\r\n                  <Image url=\"@../Photos/Home_icon_orange.png\" />\r\n               </image>\r\n            </ImageView>\r\n            <Button fx:id=\"reportsButton\" mnemonicParsing=\"false\" onAction=\"#onReporting\" text=\"reports\">\r\n               <font>\r\n                  <Font name=\"System Bold\" size=\"16.0\" />\r\n               </font>\r\n               <HBox.margin>\r\n                  <Insets right=\"60.0\" top=\"40.0\" />\r\n               </HBox.margin>\r\n            </Button>\r\n            <Button fx:id=\"adoptButton\" mnemonicParsing=\"false\" onAction=\"#onAdopt\" stylesheets=\"@../com/example/pet_shelter/LoginButton.css\" text=\"Adopt\" HBox.hgrow=\"ALWAYS\">\r\n               <HBox.margin>\r\n                  <Insets right=\"60.0\" top=\"40.0\" />\r\n               </HBox.margin>\r\n               <font>\r\n                  <Font name=\"System Bold\" size=\"16.0\" />\r\n               </font>\r\n            </Button>\r\n            <Button fx:id=\"requestButton\" layoutX=\"210.0\" layoutY=\"50.0\" mnemonicParsing=\"false\" onAction=\"#onRequest\" stylesheets=\"@../com/example/pet_shelter/LoginButton.css\" text=\"Requests\">\r\n               <font>\r\n                  <Font name=\"System Bold\" size=\"16.0\" />\r\n               </font>\r\n               <HBox.margin>\r\n                  <Insets right=\"60.0\" top=\"40.0\" />\r\n               </HBox.margin>\r\n            </Button>\r\n            <Button layoutX=\"303.0\" layoutY=\"50.0\" mnemonicParsing=\"false\" onAction=\"#onHistory\" stylesheets=\"@../com/example/pet_shelter/LoginButton.css\" text=\"History\">\r\n               <font>\r\n                  <Font name=\"System Bold\" size=\"16.0\" />\r\n               </font>\r\n               <HBox.margin>\r\n                  <Insets right=\"60.0\" top=\"40.0\" />\r\n               </HBox.margin>\r\n            </Button>\r\n            <Button fx:id=\"profileButton\" layoutX=\"377.0\" layoutY=\"10.0\" mnemonicParsing=\"false\" onAction=\"#onProfile\" stylesheets=\"@../com/example/pet_shelter/LoginButton.css\" text=\"Profile\">\r\n               <font>\r\n                  <Font name=\"System Bold\" size=\"16.0\" />\r\n               </font>\r\n               <HBox.margin>\r\n                  <Insets right=\"60.0\" top=\"40.0\" />\r\n               </HBox.margin>\r\n            </Button>\r\n            <Button fx:id=\"adminButton\" layoutX=\"1395.0\" layoutY=\"50.0\" mnemonicParsing=\"false\" onAction=\"#onAdminButton\" stylesheets=\"@../com/example/pet_shelter/LoginButton.css\" text=\"Admin\">\r\n               <font>\r\n                  <Font name=\"System Bold\" size=\"16.0\" />\r\n               </font>\r\n               <HBox.margin>\r\n                  <Insets right=\"60.0\" top=\"40.0\" />\r\n               </HBox.margin>\r\n            </Button>\r\n\r\n         </children>\r\n      </HBox>\r\n      <AnchorPane fx:id=\"leftAnchorPane\" layoutX=\"566.0\" layoutY=\"116.0\" maxHeight=\"1080.0\" maxWidth=\"1920.0\" prefHeight=\"883.0\" prefWidth=\"434.0\" style=\"-fx-background-color: #FEDCAE;\" AnchorPane.bottomAnchor=\"0.6666666666666288\" AnchorPane.leftAnchor=\"566.0\" AnchorPane.rightAnchor=\"0.0\" AnchorPane.topAnchor=\"116.0\">\r\n         <children>\r\n            <VBox layoutX=\"123.0\" layoutY=\"315.0\" prefHeight=\"276.0\" prefWidth=\"247.0\">\r\n               <children>\r\n                  <Label fx:id=\"nameLabel\" alignment=\"CENTER\" contentDisplay=\"CENTER\" style=\"-fx-border-color: black; -fx-border-width: 1;\" text=\"Name: \">\r\n                     <font>\r\n                        <Font size=\"16.0\" />\r\n                     </font>\r\n                     <padding>\r\n                        <Insets bottom=\"20.0\" />\r\n                     </padding>\r\n                     <opaqueInsets>\r\n                        <Insets />\r\n                     </opaqueInsets>\r\n                  </Label>\r\n                  <Label fx:id=\"ageLabel\" text=\"Age: \">\r\n                     <font>\r\n                        <Font size=\"16.0\" />\r\n                     </font>\r\n                     <padding>\r\n                        <Insets bottom=\"20.0\" />\r\n                     </padding>\r\n                  </Label>\r\n                  <Label fx:id=\"idLabel\" text=\"ID:\">\r\n                     <font>\r\n                        <Font size=\"16.0\" />\r\n                     </font>\r\n                     <padding>\r\n                        <Insets bottom=\"20.0\" />\r\n                     </padding>\r\n                  </Label>\r\n                  <Label fx:id=\"speciesLabel\" text=\"Species: \">\r\n                     <font>\r\n                        <Font size=\"16.0\" />\r\n                     </font>\r\n                     <padding>\r\n                        <Insets bottom=\"20.0\" />\r\n                     </padding>\r\n                  </Label>\r\n                  <Label fx:id=\"breedLabel\" text=\"Breed\">\r\n                     <font>\r\n                        <Font size=\"16.0\" />\r\n                     </font>\r\n                     <padding>\r\n                        <Insets bottom=\"20.0\" />\r\n                     </padding>\r\n                  </Label>\r\n                  <Label fx:id=\"healthStatusLabel\" text=\"Health Status: \">\r\n                     <font>\r\n                        <Font size=\"16.0\" />\r\n                     </font>\r\n                     <padding>\r\n                        <Insets bottom=\"20.0\" />\r\n                     </padding>\r\n                  </Label>\r\n               </children>\r\n               <padding>\r\n                  <Insets bottom=\"15.0\" top=\"10.0\" />\r\n               </padding>\r\n            </VBox>\r\n            <ImageView fx:id=\"petImage\" fitHeight=\"315.0\" fitWidth=\"318.0\" layoutX=\"88.0\" pickOnBounds=\"true\" preserveRatio=\"true\" />\r\n            <Button fx:id=\"adoptPetButton\" layoutX=\"166.0\" layoutY=\"615.0\" mnemonicParsing=\"false\" onAction=\"#onAdoptPet\" prefHeight=\"93.0\" prefWidth=\"161.0\" style=\"-fx-background-color: white;\" text=\"Adopt\">\r\n               <font>\r\n                  <Font name=\"System Bold\" size=\"28.0\" />\r\n               </font>\r\n            </Button>\r\n         </children>\r\n      </AnchorPane>\r\n      <VBox fx:id=\"adoptVBox\" layoutY=\"191.0\" maxHeight=\"-Infinity\" maxWidth=\"-Infinity\" minHeight=\"-Infinity\" minWidth=\"-Infinity\" prefHeight=\"808.0\" prefWidth=\"562.0\" AnchorPane.bottomAnchor=\"0.6666666666666288\" AnchorPane.leftAnchor=\"0.0\" AnchorPane.rightAnchor=\"438.0\" AnchorPane.topAnchor=\"191.0\">\r\n         <children>\r\n            <ScrollPane fitToHeight=\"true\" fitToWidth=\"true\" maxHeight=\"-Infinity\" maxWidth=\"-Infinity\" minHeight=\"-Infinity\" minWidth=\"-Infinity\" prefHeight=\"807.0\" prefWidth=\"564.0\">\r\n               <content>\r\n                  <GridPane fx:id=\"gridPane\" maxHeight=\"-Infinity\" maxWidth=\"-Infinity\" minHeight=\"10.0\" minWidth=\"10.0\" prefHeight=\"130.0\" prefWidth=\"125.0\">\r\n                     <rowConstraints>\r\n                        <RowConstraints minHeight=\"10.0\" prefHeight=\"30.0\" />\r\n                     </rowConstraints>\r\n                  </GridPane>\r\n               </content>\r\n            </ScrollPane>\r\n         </children>\r\n      </VBox>\r\n      <Button fx:id=\"shelterButton\" layoutY=\"117.0\" mnemonicParsing=\"false\" onAction=\"#onShelter\" text=\"Shelters\" />\r\n   </children>\r\n</AnchorPane>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Pet_Shelter/target/classes/FXML/program-view.fxml b/Pet_Shelter/target/classes/FXML/program-view.fxml
+--- a/Pet_Shelter/target/classes/FXML/program-view.fxml	(revision bd3f697fee33d9e7049c8156b99e7040851b5370)
++++ b/Pet_Shelter/target/classes/FXML/program-view.fxml	(date 1734707579056)
+@@ -1,9 +1,11 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ 
+ <?import javafx.geometry.Insets?>
++<?import javafx.scene.control.Accordion?>
+ <?import javafx.scene.control.Button?>
+ <?import javafx.scene.control.Label?>
+ <?import javafx.scene.control.ScrollPane?>
++<?import javafx.scene.control.TitledPane?>
+ <?import javafx.scene.image.Image?>
+ <?import javafx.scene.image.ImageView?>
+ <?import javafx.scene.layout.AnchorPane?>
+@@ -73,7 +75,7 @@
+ 
+          </children>
+       </HBox>
+-      <AnchorPane fx:id="leftAnchorPane" layoutX="566.0" layoutY="116.0" maxHeight="1080.0" maxWidth="1920.0" prefHeight="883.0" prefWidth="434.0" style="-fx-background-color: #FEDCAE;" AnchorPane.bottomAnchor="0.6666666666666288" AnchorPane.leftAnchor="566.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="116.0">
++      <AnchorPane fx:id="leftAnchorPane" layoutX="566.0" layoutY="116.0" maxHeight="1080.0" maxWidth="1920.0" prefHeight="775.0" prefWidth="305.0" style="-fx-background-color: #FEDCAE;" AnchorPane.bottomAnchor="109.0" AnchorPane.leftAnchor="566.0" AnchorPane.rightAnchor="129.0" AnchorPane.topAnchor="116.0">
+          <children>
+             <VBox layoutX="123.0" layoutY="315.0" prefHeight="276.0" prefWidth="247.0">
+                <children>
+@@ -134,7 +136,7 @@
+                </padding>
+             </VBox>
+             <ImageView fx:id="petImage" fitHeight="315.0" fitWidth="318.0" layoutX="88.0" pickOnBounds="true" preserveRatio="true" />
+-            <Button fx:id="adoptPetButton" layoutX="166.0" layoutY="615.0" mnemonicParsing="false" onAction="#onAdoptPet" prefHeight="93.0" prefWidth="161.0" style="-fx-background-color: white;" text="Adopt">
++            <Button fx:id="adoptPetButton" layoutX="58.0" layoutY="158.0" mnemonicParsing="false" onAction="#onAdoptPet" prefHeight="93.0" prefWidth="161.0" style="-fx-background-color: white;" text="Adopt">
+                <font>
+                   <Font name="System Bold" size="28.0" />
+                </font>
+@@ -155,5 +157,11 @@
+          </children>
+       </VBox>
+       <Button fx:id="shelterButton" layoutY="117.0" mnemonicParsing="false" onAction="#onShelter" text="Shelters" />
++      <Accordion>
++        <panes>
++          <TitledPane animated="false" text="untitled 1" />
++          <TitledPane animated="false" text="untitled 2" />
++        </panes>
++      </Accordion>
+    </children>
+ </AnchorPane>
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ExternalStorageConfigurationManager\" enabled=\"true\" />\r\n  <component name=\"MavenProjectsManager\">\r\n    <option name=\"originalFiles\">\r\n      <list>\r\n        <option value=\"$PROJECT_DIR$/Pet_Shelter/pom.xml\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"ProjectRootManager\" version=\"2\" languageLevel=\"JDK_22\" default=\"true\" project-jdk-name=\"22\" project-jdk-type=\"JavaSDK\">\r\n    <output url=\"file://$PROJECT_DIR$/out\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision bd3f697fee33d9e7049c8156b99e7040851b5370)
++++ b/.idea/misc.xml	(date 1734707312002)
+@@ -8,7 +8,7 @@
+       </list>
+     </option>
+   </component>
+-  <component name="ProjectRootManager" version="2" languageLevel="JDK_22" default="true" project-jdk-name="22" project-jdk-type="JavaSDK">
++  <component name="ProjectRootManager" version="2" languageLevel="JDK_22" default="true" project-jdk-name="22 (2)" project-jdk-type="JavaSDK">
+     <output url="file://$PROJECT_DIR$/out" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: Requests.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>[]
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Requests.json b/Requests.json
+--- a/Requests.json	(revision bd3f697fee33d9e7049c8156b99e7040851b5370)
++++ b/Requests.json	(date 1734709955037)
+@@ -1,1 +1,242 @@
+-[]
+\ No newline at end of file
++[
++    {
++        "adoptionStatus": "PENDED",
++        "adoptionId": 2,
++        "adoptedPet": {
++            "petId": 1,
++            "species": "Dog",
++            "healthStatus": "Healthy",
++            "name": "Doo",
++            "breed": "Dog",
++            "age": 4
++        },
++        "adoptionDate": "2024-12-20",
++        "adopter": {
++            "user_role": "User",
++            "user_password": "1234",
++            "user_email": "7amada@gmail.com",
++            "phoneNumber": 120,
++            "address": "haram",
++            "gender": "male",
++            "user_name": "7amada",
++            "id": 232,
++            "age": 22
++        }
++    },
++    {
++        "adoptionStatus": "PENDED",
++        "adoptionId": 2,
++        "adoptedPet": {
++            "petId": 1,
++            "species": "Dog",
++            "healthStatus": "Healthy",
++            "name": "Doo",
++            "breed": "Dog",
++            "age": 4
++        },
++        "adoptionDate": "2024-12-20",
++        "adopter": {
++            "user_role": "User",
++            "user_password": "1234",
++            "user_email": "7amada@gmail.com",
++            "phoneNumber": 120,
++            "address": "haram",
++            "gender": "male",
++            "user_name": "7amada",
++            "id": 232,
++            "age": 22
++        }
++    },
++    {
++        "adoptionStatus": "PENDED",
++        "adoptionId": 2,
++        "adoptedPet": {
++            "petId": 1,
++            "species": "Dog",
++            "healthStatus": "Healthy",
++            "name": "Doo",
++            "breed": "Dog",
++            "age": 4
++        },
++        "adoptionDate": "2024-12-20",
++        "adopter": {
++            "user_role": "User",
++            "user_password": "1234",
++            "user_email": "7amada@gmail.com",
++            "phoneNumber": 120,
++            "address": "haram",
++            "gender": "male",
++            "user_name": "7amada",
++            "id": 232,
++            "age": 22
++        }
++    },
++    {
++        "adoptionStatus": "PENDED",
++        "adoptionId": 2,
++        "adoptedPet": {
++            "petId": 1,
++            "species": "Dog",
++            "healthStatus": "Healthy",
++            "name": "Doo",
++            "breed": "Dog",
++            "age": 4
++        },
++        "adoptionDate": "2024-12-20",
++        "adopter": {
++            "user_role": "User",
++            "user_password": "1234",
++            "user_email": "7amada@gmail.com",
++            "phoneNumber": 120,
++            "address": "haram",
++            "gender": "male",
++            "user_name": "7amada",
++            "id": 232,
++            "age": 22
++        }
++    },
++    {
++        "adoptionStatus": "PENDED",
++        "adoptionId": 2,
++        "adoptedPet": {
++            "petId": 1,
++            "species": "Dog",
++            "healthStatus": "Healthy",
++            "name": "Doo",
++            "breed": "Dog",
++            "age": 4
++        },
++        "adoptionDate": "2024-12-20",
++        "adopter": {
++            "user_role": "User",
++            "user_password": "1234",
++            "user_email": "7amada@gmail.com",
++            "phoneNumber": 120,
++            "address": "haram",
++            "gender": "male",
++            "user_name": "7amada",
++            "id": 232,
++            "age": 22
++        }
++    },
++    {
++        "adoptionStatus": "PENDED",
++        "adoptionId": 2,
++        "adoptedPet": {
++            "petId": 3,
++            "species": "Cat",
++            "healthStatus": "healthy",
++            "name": "Catter",
++            "breed": "Cat",
++            "age": 4
++        },
++        "adoptionDate": "2024-12-20",
++        "adopter": {
++            "user_role": "User",
++            "user_password": "1234",
++            "user_email": "7amada@gmail.com",
++            "phoneNumber": 120,
++            "address": "haram",
++            "gender": "male",
++            "user_name": "7amada",
++            "id": 232,
++            "age": 22
++        }
++    },
++    {
++        "adoptionStatus": "PENDED",
++        "adoptionId": 2,
++        "adoptedPet": {
++            "petId": 3,
++            "species": "Cat",
++            "healthStatus": "healthy",
++            "name": "Catter",
++            "breed": "Cat",
++            "age": 4
++        },
++        "adoptionDate": "2024-12-20",
++        "adopter": {
++            "user_role": "User",
++            "user_password": "1234",
++            "user_email": "7amada@gmail.com",
++            "phoneNumber": 120,
++            "address": "haram",
++            "gender": "male",
++            "user_name": "7amada",
++            "id": 232,
++            "age": 22
++        }
++    },
++    {
++        "adoptionStatus": "PENDED",
++        "adoptionId": 4,
++        "adoptedPet": {
++            "petId": 2,
++            "species": "Dog",
++            "healthStatus": "Healthy",
++            "name": "Doggo",
++            "breed": "Dog",
++            "age": 4
++        },
++        "adoptionDate": "2024-12-20",
++        "adopter": {
++            "user_role": "User",
++            "user_password": "1234",
++            "user_email": "7amada@gmail.com",
++            "phoneNumber": 120,
++            "address": "haram",
++            "gender": "male",
++            "user_name": "7amada",
++            "id": 232,
++            "age": 22
++        }
++    },
++    {
++        "adoptionStatus": "PENDED",
++        "adoptionId": 4,
++        "adoptedPet": {
++            "petId": 0,
++            "species": "Dog",
++            "healthStatus": "Healthy",
++            "name": "Doggo",
++            "breed": "Dog",
++            "age": 4
++        },
++        "adoptionDate": "2024-12-20",
++        "adopter": {
++            "user_role": "User",
++            "user_password": "1234",
++            "user_email": "7amada@gmail.com",
++            "phoneNumber": 120,
++            "address": "haram",
++            "gender": "male",
++            "user_name": "7amada",
++            "id": 232,
++            "age": 22
++        }
++    },
++    {
++        "adoptionStatus": "PENDED",
++        "adoptionId": 3,
++        "adoptedPet": {
++            "petId": 3,
++            "species": "Cat",
++            "healthStatus": "healthy",
++            "name": "Catter",
++            "breed": "Cat",
++            "age": 4
++        },
++        "adoptionDate": "2024-12-20",
++        "adopter": {
++            "user_role": "User",
++            "user_password": "1234",
++            "user_email": "7amada@gmail.com",
++            "phoneNumber": 120,
++            "address": "haram",
++            "gender": "male",
++            "user_name": "7amada",
++            "id": 232,
++            "age": 22
++        }
++    }
++]
+\ No newline at end of file
+Index: Pets.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>[{\"ImgSource\":\"file:/C:/Users/Taha/IdeaProjects/Pet_Shelter_Git/Pet_Shelter/src/main/resources/Photos/Dog.png\",\"species\":\"Dog\",\"healthStatus\":\"Healthy\",\"name\":\"Doggo\",\"id\":0,\"breed\":\"Dog\",\"age\":4},{\"ImgSource\":\"file:/C:/Users/Taha/IdeaProjects/Pet_Shelter_Git/Pet_Shelter/src/main/resources/Photos/Dog.png\",\"species\":\"Dog\",\"healthStatus\":\"Healthy\",\"name\":\"Doo\",\"id\":1,\"breed\":\"Dog\",\"age\":4},{\"ImgSource\":\"file:/C:/Users/Taha/IdeaProjects/Pet_Shelter_Git/Pet_Shelter/src/main/resources/Photos/Dog.png\",\"species\":\"Dog\",\"healthStatus\":\"Healthy\",\"name\":\"Doggo\",\"id\":2,\"breed\":\"Dog\",\"age\":4},{\"ImgSource\":\"file:/C:/Users/Taha/IdeaProjects/Pet_Shelter_Git/Pet_Shelter/src/main/resources/Photos/Cat.png\",\"species\":\"Cat\",\"healthStatus\":\"healthy\",\"name\":\"Catter\",\"id\":3,\"breed\":\"Cat\",\"age\":4}]
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Pets.json b/Pets.json
+--- a/Pets.json	(revision bd3f697fee33d9e7049c8156b99e7040851b5370)
++++ b/Pets.json	(date 1734709955035)
+@@ -1,1 +1,1 @@
+-[{"ImgSource":"file:/C:/Users/Taha/IdeaProjects/Pet_Shelter_Git/Pet_Shelter/src/main/resources/Photos/Dog.png","species":"Dog","healthStatus":"Healthy","name":"Doggo","id":0,"breed":"Dog","age":4},{"ImgSource":"file:/C:/Users/Taha/IdeaProjects/Pet_Shelter_Git/Pet_Shelter/src/main/resources/Photos/Dog.png","species":"Dog","healthStatus":"Healthy","name":"Doo","id":1,"breed":"Dog","age":4},{"ImgSource":"file:/C:/Users/Taha/IdeaProjects/Pet_Shelter_Git/Pet_Shelter/src/main/resources/Photos/Dog.png","species":"Dog","healthStatus":"Healthy","name":"Doggo","id":2,"breed":"Dog","age":4},{"ImgSource":"file:/C:/Users/Taha/IdeaProjects/Pet_Shelter_Git/Pet_Shelter/src/main/resources/Photos/Cat.png","species":"Cat","healthStatus":"healthy","name":"Catter","id":3,"breed":"Cat","age":4}]
+\ No newline at end of file
++[{"ImgSource":"file:/C:/Users/mohamed%20sameh/Desktop/Pet_Shelter/Pet_Shelter/src/main/resources/Photos/Dog.png","species":"Dog","healthStatus":"Healthy","name":"Doggo","id":0,"breed":"Dog","age":4},{"ImgSource":"file:/C:/Users/mohamed%20sameh/Desktop/Pet_Shelter/Pet_Shelter/src/main/resources/Photos/Dog.png","species":"Dog","healthStatus":"Healthy","name":"Doo","id":1,"breed":"Dog","age":4},{"ImgSource":"file:/C:/Users/mohamed%20sameh/Desktop/Pet_Shelter/Pet_Shelter/src/main/resources/Photos/Dog.png","species":"Dog","healthStatus":"Healthy","name":"Doggo","id":2,"breed":"Dog","age":4},{"ImgSource":"file:/C:/Users/mohamed%20sameh/Desktop/Pet_Shelter/Pet_Shelter/src/main/resources/Photos/Cat.png","species":"Cat","healthStatus":"healthy","name":"Catter","id":3,"breed":"Cat","age":4}]
+\ No newline at end of file
